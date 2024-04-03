@@ -17,7 +17,7 @@ public class QuestionEntity {
 
     private String label;
 
-    private Short index;
+    private Short position;
 
     private String alternatives;
 
