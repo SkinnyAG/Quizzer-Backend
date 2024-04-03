@@ -2,6 +2,5 @@
 <module name="Checker">
     <module name="TreeWalker">
         <property name="tabWidth" value="2"/>
-        <property name="max" value="40"/>
     </module>
 </module>
