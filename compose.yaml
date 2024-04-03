@@ -1,10 +1,16 @@
+version: '3.3'
+
 services:
-  mysql:
-    image: 'mysql:latest'
+  db:
+    image: mysql:8.3
+    restart: always
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      MYSQL_DATABASE: 'db-dev'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'changemeinprod'
+      MYSQL_ROOT_PASSWORD: 'changemeinprodroot'
     ports:
+      - '3306:3306'
+    expose:
       - '3306'
+
