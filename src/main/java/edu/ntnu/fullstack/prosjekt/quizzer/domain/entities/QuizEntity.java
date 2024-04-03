@@ -25,7 +25,7 @@ public class QuizEntity {
     @JoinColumn(name = "username")
     private UserEntity owner;
 
-    @OneToMany (mappedBy = "quizId")
+    @OneToMany (mappedBy = "quiz")
     private List<QuestionEntity> questions;
 
 }

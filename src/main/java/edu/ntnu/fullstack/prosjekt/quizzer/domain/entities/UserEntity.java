@@ -26,6 +26,6 @@ public class UserEntity {
 
     private String password;
 
-    @OneToMany (mappedBy = "username")
+    @OneToMany (mappedBy = "owner")
     private List<QuizEntity> quizzes;
 }
