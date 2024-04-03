@@ -1,4 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.repositories;
 
-public interface UserRepository {
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends CrudRepository {
 }
