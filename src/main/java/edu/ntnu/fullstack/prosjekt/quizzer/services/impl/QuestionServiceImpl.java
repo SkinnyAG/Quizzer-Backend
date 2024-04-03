@@ -3,7 +3,9 @@ package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.QuestionRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
 
