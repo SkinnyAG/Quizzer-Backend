@@ -36,6 +36,11 @@ public class QuestionEntity {
   private String label;
 
   /**
+   * Links to an image for the quiz.
+   */
+  private String imageLink;
+
+  /**
    * The position field should tell the question which position it will have in an ordered quiz,
    * which will be randomized if wanted.
    */

@@ -44,6 +44,11 @@ public class QuizEntity {
   private String description;
 
   /**
+   * Links to an image for the quiz.
+   */
+  private String imageLink;
+
+  /**
    * The owner field should represent the user who owns the quiz, with many quizzes belonging to
    * one user. This field is a foreign key linking owner and quizzes.
    */
