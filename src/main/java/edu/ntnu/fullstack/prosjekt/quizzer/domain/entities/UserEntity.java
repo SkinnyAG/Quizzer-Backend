@@ -23,9 +23,12 @@ public class UserEntity {
     private String fullName;
 
     private String email;
-
     private String password;
 
     @OneToMany (mappedBy = "owner")
     private List<QuizEntity> quizzes;
+
+    public String getPassword() {
+        return this.password;
+    }
 }
