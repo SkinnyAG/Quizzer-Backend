@@ -52,10 +52,7 @@ public class QuestionController {
   public ResponseEntity<?> addQuestion(@RequestBody QuestionDto questionDto) {
     log.info("Received request addQuestion for question: " + questionDto);
     try {
-      log.info("Attempting to map questionDto to questionEntity");
       QuestionEntity questionEntity = questionMapper.mapFrom(questionDto);
-      log.info("Successfully mapped");
-      log.info("Check if necessary fields are set");
 
       if (questionEntity.getLabel() == null || questionEntity.getLabel().isEmpty()) {
         log.info("Invalid question label");
@@ -67,11 +64,9 @@ public class QuestionController {
         return ResponseEntity.badRequest().body("No quiz assigned to question.");
       }
 
-      log.info("Checks finished, sending question to service layer");
       QuestionEntity savedQuestionEntity = questionService.createQuestion(questionEntity);
       log.info("Successfully added question to database: " + questionEntity);
       QuestionDto savedQuestionDto = questionMapper.mapTo(savedQuestionEntity);
-      log.info("Sending successful response to frontend");
       return new ResponseEntity<>(savedQuestionDto, HttpStatus.CREATED);
     } catch (Exception e) {
       log.info("An unforeseen error occurred");

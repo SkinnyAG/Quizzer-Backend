@@ -35,7 +35,6 @@ public class QuestionServiceImpl implements QuestionService {
    */
   @Override
   public QuestionEntity createQuestion(QuestionEntity questionEntity) {
-    log.info("Question received in Service, attempting to add to database.");
     return questionRepository.save(questionEntity);
   }
 

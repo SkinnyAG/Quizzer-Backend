@@ -64,7 +64,7 @@ public class UserController {
       UserEntity userEntity = userMapper.mapFrom(user);
       //Check if user already exists
       if (userService.userExists(userEntity)) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User already exists!");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists!");
       }
       UserEntity savedUserEntity = userService.createUser(userEntity);
       UserDto savedUserDto = userMapper.mapTo(savedUserEntity);
