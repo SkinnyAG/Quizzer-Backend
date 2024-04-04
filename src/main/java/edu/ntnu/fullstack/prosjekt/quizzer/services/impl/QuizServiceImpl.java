@@ -49,4 +49,12 @@ public class QuizServiceImpl implements QuizService {
   public Page<QuizEntity> findPageOfQuizzes(Pageable pageable) {
     return quizRepository.findAll(pageable);
   }
+
+  @Override
+  public QuizEntity findQuizById(Long quizId) {
+    if (quizRepository.findById(quizId).isPresent()) {
+      return quizRepository.findById(quizId).get();
+    }
+    return null;
+  }
 }

@@ -48,7 +48,7 @@ public class QuestionController {
    * @param questionDto The question to create.
    * @return A response with a status code and message. Fails if question misses necessary fields.
    */
-  @PostMapping("/create")
+  @PostMapping()
   public ResponseEntity<?> addQuestion(@RequestBody QuestionDto questionDto) {
     log.info("Received request addQuestion for question: " + questionDto);
     try {

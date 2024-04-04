@@ -23,4 +23,12 @@ public interface QuizService {
    */
   Page<QuizEntity> findPageOfQuizzes(Pageable pageable);
 
+  /**
+   * Service for finding a specific quiz given an id.
+   *
+   * @param quizId Unique identifier for the quiz.
+   * @return The quiz
+   */
+  QuizEntity findQuizById(Long quizId);
+
 }
