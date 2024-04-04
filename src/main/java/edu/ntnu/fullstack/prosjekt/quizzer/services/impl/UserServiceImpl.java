@@ -5,9 +5,6 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.UserRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +50,6 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(userToBeChecked.getPassword(),
             userEntity.get().getPassword());
     }
-
 
   /**
    * Creates a user and hashes its password before storing it in the database.
