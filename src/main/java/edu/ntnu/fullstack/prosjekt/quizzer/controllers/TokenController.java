@@ -59,7 +59,7 @@ public class TokenController {
     final JWTVerifier verifier = JWT.require(hmac512).build();
     return JWT.create()
         .withSubject(userId)
-        .withIssuer(projectIssuer)
+        .withIssuer("QuizzerBackend")
         .withIssuedAt(now)
         .withExpiresAt(now.plusMillis(JWT_TOKEN_VALIDITY.toMillis()))
         .sign(hmac512);
