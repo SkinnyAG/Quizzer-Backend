@@ -32,8 +32,6 @@ public class TokenController {
   private UserService userService;
   private Mapper<UserEntity, UserDto> userMapper;
 
-  @Value("${app.issuer.name}")
-  private String projectIssuer;
 
   public TokenController (UserService userService, Mapper<UserEntity, UserDto> userMapper) {
     this.userService = userService;
