@@ -45,7 +45,6 @@ public class TokenController {
   @ResponseStatus(value = HttpStatus.CREATED)
   public String generateToken(final @RequestBody LoginDTO loginRequest) throws Exception {
     // if username and password are valid, issue an access token
-    // note that subsequent requests need this token
 
     if (userService.checkCredentials(loginRequest)) {
       return generateToken(loginRequest.getUsername());

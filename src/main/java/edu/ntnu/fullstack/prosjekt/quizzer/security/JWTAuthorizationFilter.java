@@ -54,7 +54,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     public String validateTokenAndGetUserId(final String token) {
         try {
-            final Algorithm hmac512 = Algorithm.HMAC512("");
+            final Algorithm hmac512 = Algorithm.HMAC512("changemeinprod");
             final JWTVerifier verifier = JWT.require(hmac512).build();
             return verifier.verify(token).getSubject();
         } catch (final JWTVerificationException verificationException) {
