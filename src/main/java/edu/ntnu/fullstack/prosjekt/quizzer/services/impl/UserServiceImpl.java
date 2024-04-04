@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
    */
   @Override
     public Boolean checkCredentials(LoginDTO userToBeChecked) {
+    //TODO: fikse litt exception handling
         Optional<UserEntity> userEntity = findByUsername(userToBeChecked.getUsername());
         return passwordEncoder.matches(userToBeChecked.getPassword(),
             userEntity.get().getPassword());
