@@ -1,10 +1,16 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.models.AnswerModel;
 
+/**
+ * Interface providing services between the question database table and user requests.
+ */
 public interface QuestionService {
-    QuestionEntity createQuestion(QuestionEntity questionEntity);
-
-
+  /**
+   * Service for creating a question in the database.
+   *
+   * @param questionEntity QuestionEntity that should be added.
+   * @return The created QuestionEntity.
+   */
+  QuestionEntity createQuestion(QuestionEntity questionEntity);
 }

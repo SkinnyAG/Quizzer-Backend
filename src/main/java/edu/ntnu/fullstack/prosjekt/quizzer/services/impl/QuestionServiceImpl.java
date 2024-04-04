@@ -1,31 +1,42 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.models.AnswerModel;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.models.QuestionModel;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.QuestionRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
+/**
+ * A class implementing the methods specified in its interface.
+ * Provides services between user requests and database operations.
+ */
 @Service
 @Log
 public class QuestionServiceImpl implements QuestionService {
-    private QuestionRepository questionRepository;
+  /**
+   * Used for Dependency Injection.
+   */
+  private QuestionRepository questionRepository;
 
-    private ObjectMapper objectMapper;
+  /**
+   * Used for Dependency Injection.
+   *
+   * @param questionRepository The injected QuestionRepository object.
+   */
+  public QuestionServiceImpl(QuestionRepository questionRepository) {
+    this.questionRepository = questionRepository;
+  }
 
-    public QuestionServiceImpl(QuestionRepository questionRepository, ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-        this.questionRepository = questionRepository;
-    }
-
-    @Override
-    public QuestionEntity createQuestion(QuestionEntity questionEntity) {
-        log.info("Question received in Service, attempting to add to database.");
-        return questionRepository.save(questionEntity);
-    }
+  /**
+   * Creates a question in the database table.
+   *
+   * @param questionEntity QuestionEntity that should be added.
+   * @return The created QuestionEntity
+   */
+  @Override
+  public QuestionEntity createQuestion(QuestionEntity questionEntity) {
+    log.info("Question received in Service, attempting to add to database.");
+    return questionRepository.save(questionEntity);
+  }
 
 }
