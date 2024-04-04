@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/token", "api/users/register", "api/users/login", "api/quizzes/create", "api/questions/create").permitAll()
+                .requestMatchers("/token", "api/users/register", "api/users/login", "api/quizzes/create", "api/questions/create", "v3/api-docs").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
