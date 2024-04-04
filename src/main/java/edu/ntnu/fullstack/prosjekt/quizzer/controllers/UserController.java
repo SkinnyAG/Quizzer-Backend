@@ -20,12 +20,12 @@ public class UserController {
 
     private Mapper<UserEntity, UserDto> userMapper;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, Mapper<UserEntity, UserDto> userMapper) {
+    public UserController(UserService userService, Mapper<UserEntity, UserDto> userMapper, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @ResponseStatus(HttpStatus.CREATED)

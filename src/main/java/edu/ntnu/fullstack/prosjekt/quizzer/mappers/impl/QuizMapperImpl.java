@@ -4,7 +4,9 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class QuizMapperImpl implements Mapper<QuizEntity, QuizDto> {
 
     private ModelMapper modelMapper;
