@@ -7,9 +7,11 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.models.AnswerModel;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.models.QuestionModel;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.QuestionRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log
 public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
 
@@ -22,6 +24,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionEntity createQuestion(QuestionEntity questionEntity) {
+        log.info("Question received in Service, attempting to add to database.");
         return questionRepository.save(questionEntity);
     }
 
