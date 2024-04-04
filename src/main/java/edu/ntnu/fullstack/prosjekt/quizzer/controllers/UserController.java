@@ -6,6 +6,8 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import java.util.Optional;
+
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Rest Controller used for managing requests relating to user database operations.
  * Base endpoint is /api/users/
  */
+@Log
 @CrossOrigin(origins = "http://localhost:5174")
 @RequestMapping("/api/users")
 @RestController
@@ -60,6 +63,7 @@ public class UserController {
    */
   @PostMapping(path = "/register")
   public ResponseEntity<?> createUser(@RequestBody UserDto user) {
+    log.info("Received register request from user: " + user);
     try {
       UserEntity userEntity = userMapper.mapFrom(user);
       //Check if user already exists
