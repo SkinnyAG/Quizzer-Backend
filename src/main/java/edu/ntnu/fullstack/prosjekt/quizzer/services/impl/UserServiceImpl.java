@@ -67,7 +67,10 @@ public class UserServiceImpl implements UserService {
    * @return An optional value containing the UserEntity object.
    */
   @Override
-  public Optional<UserEntity> findByUsername(String username) {
-    return userRepository.findById(username);
+  public UserEntity findByUsername(String username) {
+    if (userRepository.findById(username).isPresent()) {
+      return userRepository.findById(username).get();
+    }
+    return null;
   }
 }

@@ -5,8 +5,6 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
-import java.util.Optional;
-
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,8 +86,8 @@ public class UserController {
   @PostMapping(path = "/login")
   public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginUser) {
     try {
-      Optional<UserEntity> userEntity = userService.findByUsername(loginUser.getUsername());
-      if (passwordEncoder.matches(loginUser.getPassword(), userEntity.get().getPassword())) {
+      UserEntity userEntity = userService.findByUsername(loginUser.getUsername());
+      if (passwordEncoder.matches(loginUser.getPassword(), userEntity.getPassword())) {
         return ResponseEntity.ok("User authenticated successfully");
       } else {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");

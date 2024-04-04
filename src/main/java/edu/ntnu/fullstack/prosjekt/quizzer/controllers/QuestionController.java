@@ -1,8 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
-import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -27,19 +25,11 @@ public class QuestionController {
 
   /**
    * Used for Dependency Injection.
-   */
-  private Mapper<QuestionEntity, QuestionDto> questionMapper;
-
-  /**
-   * Used for Dependency Injection.
    *
    * @param questionService The Injected QuestionService object.
-   * @param questionMapper The Injected QuestionMapper object.
    */
-  public QuestionController(QuestionService questionService, Mapper<QuestionEntity,
-          QuestionDto> questionMapper) {
+  public QuestionController(QuestionService questionService) {
     this.questionService = questionService;
-    this.questionMapper = questionMapper;
   }
 
   /**
@@ -52,24 +42,11 @@ public class QuestionController {
   public ResponseEntity<?> addQuestion(@RequestBody QuestionDto questionDto) {
     log.info("Received request addQuestion for question: " + questionDto);
     try {
-      QuestionEntity questionEntity = questionMapper.mapFrom(questionDto);
 
-      if (questionEntity.getLabel() == null || questionEntity.getLabel().isEmpty()) {
-        log.info("Invalid question label");
-        return ResponseEntity.badRequest().body("The question must have a label");
-      }
-
-      if (questionEntity.getQuiz() == null) {
-        log.info("No quiz associated with question");
-        return ResponseEntity.badRequest().body("No quiz assigned to question.");
-      }
-
-      QuestionEntity savedQuestionEntity = questionService.createQuestion(questionEntity);
-      log.info("Successfully added question to database: " + questionEntity);
-      QuestionDto savedQuestionDto = questionMapper.mapTo(savedQuestionEntity);
+      QuestionDto savedQuestionDto = questionService.createQuestion(questionDto);
       return new ResponseEntity<>(savedQuestionDto, HttpStatus.CREATED);
     } catch (Exception e) {
-      log.info("An unforeseen error occurred");
+      System.out.println(e);
       return ResponseEntity.badRequest().body("An unforeseen error occurred");
     }
   }
