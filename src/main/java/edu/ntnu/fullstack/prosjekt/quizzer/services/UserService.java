@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDTO;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import java.util.Optional;
 
@@ -10,4 +11,5 @@ public interface UserService {
 
     Optional<UserEntity> findByUsername(String username);
 
+    Boolean checkCredentials (LoginDTO userToBeChecked);
 }

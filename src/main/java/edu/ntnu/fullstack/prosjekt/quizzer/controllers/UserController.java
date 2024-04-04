@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "http://localhost:5175")
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
@@ -49,8 +49,7 @@ public class UserController {
     @PostMapping(path = "/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginUser) {
         try {
-            Optional<UserEntity> userEntity = userService.findByUsername(loginUser.getUsername());
-            if (passwordEncoder.matches(loginUser.getPassword(), userEntity.get().getPassword())){
+            if (userService.checkCredentials(loginUser)) {
                 return ResponseEntity.ok("User authenticated successfully");
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
