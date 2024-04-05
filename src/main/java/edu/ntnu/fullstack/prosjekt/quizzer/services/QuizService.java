@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
@@ -18,7 +19,7 @@ public interface QuizService {
    */
   QuizDto createQuiz(QuizDto quizDto);
 
-  QuestionDto addQuestionToQuiz(QuestionDto questionDto);
+  QuestionDto addQuestionToQuiz(QuestionDto questionDto) throws JsonProcessingException;
 
   /**
    * Service for finding a page of quizzes in the database.

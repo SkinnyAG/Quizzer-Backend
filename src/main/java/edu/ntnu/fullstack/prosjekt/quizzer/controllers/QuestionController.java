@@ -33,22 +33,4 @@ public class QuestionController {
   public QuestionController(QuestionService questionService) {
     this.questionService = questionService;
   }
-
-  /**
-   * Endpoint for creating a question.
-   *
-   * @param questionDto The question to create.
-   * @return A response with a status code and message. Fails if question misses necessary fields.
-   */
-  /*
-  @PostMapping()
-  public ResponseEntity<?> addQuestion(@RequestBody QuestionDto questionDto) {
-    log.info("Received request addQuestion for question: " + questionDto);
-    try {
-      QuestionDto savedQuestionDto =
-      return new ResponseEntity<>(savedQuestionDto, HttpStatus.CREATED);
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body("An unforeseen error occurred");
-    }
-  }*/
 }

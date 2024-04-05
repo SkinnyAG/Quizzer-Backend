@@ -1,5 +1,8 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionAnswersDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
@@ -25,6 +28,8 @@ public class QuestionServiceImpl implements QuestionService {
    */
   private QuestionRepository questionRepository;
 
+  private ObjectMapper objectMapper;
+
 
   private Mapper<QuestionEntity, QuestionDto> questionMapper;
 
@@ -34,9 +39,11 @@ public class QuestionServiceImpl implements QuestionService {
    * @param questionRepository The injected QuestionRepository object.
    */
   public QuestionServiceImpl(QuestionRepository questionRepository,
-                             Mapper<QuestionEntity, QuestionDto> questionMapper) {
+                             Mapper<QuestionEntity, QuestionDto> questionMapper,
+                             ObjectMapper objectMapper) {
     this.questionRepository = questionRepository;
     this.questionMapper = questionMapper;
+    this.objectMapper = objectMapper;
   }
 
   /**
@@ -56,16 +63,51 @@ public class QuestionServiceImpl implements QuestionService {
     QuestionEntity questionEntity = questionMapper.mapFrom(questionDto);
     questionEntity.setQuiz(quizEntity);
 
-    questionRepository.save(questionEntity);
-    return questionMapper.mapTo(questionEntity);
+    mapToJson(questionDto.getAlternatives(), questionEntity);
+
+    QuestionEntity savedQuestionEntity = questionRepository.save(questionEntity);
+    QuestionDto savedQuestionDto = questionMapper.mapTo(savedQuestionEntity);
+
+    mapFromJson(savedQuestionEntity);
+
+    log.info("Saved question entity: " + savedQuestionEntity);
+    log.info("Saved question as dto: " + questionMapper.mapTo(savedQuestionEntity));
+    return savedQuestionDto;
   }
 
   @Override
   public List<QuestionDto> getQuestionsByQuiz(QuizEntity quizEntity) {
     List<QuestionEntity> questionEntities = questionRepository.findQuestionEntitiesByQuiz(quizEntity);
-    List<QuestionDto> questionDtos = questionEntities.stream().map(questionEntity ->
-            questionMapper.mapTo(questionEntity)).toList();
+    log.info("Before mapping to dot");
+    List<QuestionDto> questionDtos = questionEntities.stream().map(questionEntity -> questionMapper
+            .mapTo(questionEntity)).toList();
+    log.info("After mapping to dto: " + questionDtos);
     return questionDtos;
+  }
+
+  public QuestionDto mapFromJson(QuestionEntity questionEntity) {
+    QuestionDto questionDto = questionMapper.mapTo(questionEntity);
+    if (questionEntity.getAlternatives() != null) {
+      try {
+        questionDto.setAlternatives(objectMapper.readValue(questionEntity.getAlternatives(), List.class));
+        return questionDto;
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return null;
+  }
+
+  public QuestionEntity mapToJson(List<QuestionAnswersDto> questions, QuestionEntity questionEntity) {
+    if (questions != null && questionEntity != null) {
+      try {
+        questionEntity.setAlternatives(objectMapper.writeValueAsString(questions));
+        return questionEntity;
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return null;
   }
 
 }

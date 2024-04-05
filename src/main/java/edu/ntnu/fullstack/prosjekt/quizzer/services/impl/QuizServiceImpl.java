@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
@@ -86,7 +87,7 @@ public class QuizServiceImpl implements QuizService {
   }
 
   @Override
-  public QuestionDto addQuestionToQuiz(QuestionDto questionDto) {
+  public QuestionDto addQuestionToQuiz(QuestionDto questionDto) throws JsonProcessingException {
     if (quizRepository.findById(Long.parseLong(questionDto.getQuizId())).isPresent()) {
       QuizEntity quizEntity = quizRepository.findById(Long.parseLong(
               questionDto.getQuizId())).get();

@@ -55,5 +55,6 @@ public class QuizEntity {
    */
   @ManyToOne
   @JsonBackReference
+  @JoinColumn(name = "username")
   private UserEntity owner;
 }

@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
@@ -52,7 +53,7 @@ public class QuizController {
   }
 
   @PatchMapping()
-  public ResponseEntity<?> addQuestionToQuiz(@RequestBody QuestionDto questionDto) {
+  public ResponseEntity<?> addQuestionToQuiz(@RequestBody QuestionDto questionDto) throws JsonProcessingException {
     log.info("Testiiing");
     log.info("Received: " + questionDto);
     QuestionDto responseDto = quizService.addQuestionToQuiz(questionDto);
@@ -78,6 +79,7 @@ public class QuizController {
    * @param quizId ID of the quiz
    * @return A quizDto object representing the quiz.
    */
+  /*
   @GetMapping(path = "/{quizId}")
   public ResponseEntity<?> getQuiz(@PathVariable String quizId) {
     if (quizService.findQuizDtoById(quizId) == null) {
@@ -85,9 +87,9 @@ public class QuizController {
     }
     QuizDto responseQuizDto = quizService.findQuizDtoById(quizId);
     return new ResponseEntity<>(responseQuizDto, HttpStatus.OK);
-  }
+  }*/
 
-  @GetMapping(path = "/{quizId}/details")
+  @GetMapping(path = "/{quizId}")
   public ResponseEntity<?> getQuizDetails(@PathVariable String quizId) {
     QuizDto quizDto = quizService.findQuizDetails(quizId);
     log.info("Received questions: " + quizDto);
