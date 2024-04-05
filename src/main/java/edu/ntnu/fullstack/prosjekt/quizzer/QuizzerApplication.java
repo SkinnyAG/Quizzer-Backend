@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 /**
  * Main Application Runner.
  */
-@CrossOrigin(origins="*")
 @SpringBootApplication
 public class QuizzerApplication {
 
