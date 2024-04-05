@@ -101,6 +101,12 @@ public class QuizServiceImpl implements QuizService {
     return null;
   }
 
+  /**
+   * Finds the entity of a specified quiz.
+   *
+   * @param quizId Unique identifier for the quiz to search for.
+   * @return An Entity of the queried quiz.
+   */
   @Override
   public QuizEntity findQuizEntityById(String quizId) {
     Long idValue = Long.parseLong(quizId);

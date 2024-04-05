@@ -3,8 +3,6 @@ package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.UserRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
-import java.util.Optional;
-
 import lombok.extern.java.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

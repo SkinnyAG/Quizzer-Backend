@@ -32,6 +32,12 @@ public interface QuizService {
    */
   QuizDto findQuizDtoById(String quizId);
 
+  /**
+   * Service for finding a specific quiz given an id.
+   *
+   * @param quizId Unique identifier for the quiz.
+   * @return The quiz as an entity.
+   */
   QuizEntity findQuizEntityById(String quizId);
 
 }
