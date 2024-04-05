@@ -144,4 +144,19 @@ public class UserServiceImpl implements UserService {
     user.setFullName(newFullName);
     userRepository.save(user);
   }
+
+  /**
+   * Updates the password of a user.
+   *
+   * @param username the username of the user whose full name is to be updated.
+   * @param newPassword the new password to set for the user.
+   */
+  @Transactional
+  public void updateUserPassword(String username, String newPassword) {
+    UserEntity user = userRepository.findById(username)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+    String newHashedPassword = passwordEncoder.encode(newPassword);
+    user.setPassword(newHashedPassword);
+    userRepository.save(user);
+  }
 }

@@ -52,4 +52,11 @@ public interface UserService {
    */
   void updateUserFullName(String username, String newFullName);
 
+  /**
+   * Service for updating a users' password.
+   *
+   * @param username The chosen user.
+   * @param newPassword The new full name for the chosen user.
+   */
+  void updateUserPassword(String username, String newPassword);
 }

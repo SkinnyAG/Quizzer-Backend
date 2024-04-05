@@ -131,7 +131,28 @@ public class UserController {
       userService.updateUserFullName(username, userDto.getFullName());
       return ResponseEntity.ok("User full name updated successfully");
     } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the email", e);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the full name", e);
+    }
+  }
+
+  /**
+   * Endpoint for updating a users' password.
+   *
+   * @param username the chosen user for the password update.
+   * @param userDto DTO containing the new password.
+   * @return A response entity with either a not authorized message, or ok-message.
+   */
+  @PostMapping("/{username}/update-password")
+  public ResponseEntity<String> updateUserPassword(@PathVariable("username") String username, @RequestBody UserDto userDto) {
+    String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+    if (!username.equals(authenticatedUsername)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
+    }
+    try {
+      userService.updateUserPassword(username, userDto.getPassword());
+      return ResponseEntity.ok("User password updated successfully");
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the password", e);
     }
   }
 }
