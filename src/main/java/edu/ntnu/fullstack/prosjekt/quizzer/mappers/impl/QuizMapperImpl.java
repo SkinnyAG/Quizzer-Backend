@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.mappers.impl;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import org.modelmapper.ModelMapper;
@@ -36,7 +37,7 @@ public class QuizMapperImpl implements Mapper<QuizEntity, QuizDto> {
   public QuizDto mapTo(QuizEntity quizEntity) {
     QuizDto quizDto = modelMapper.map(quizEntity, QuizDto.class);
     if (quizEntity.getOwner() != null) {
-      quizDto.setOwner(quizEntity.getOwner().getUsername());
+      quizDto.setOwner(modelMapper.map(quizEntity.getOwner(), UserDto.class));
     }
     return quizDto;
   }

@@ -70,6 +70,7 @@ public class QuizController {
    * @param quizId ID of the quiz
    * @return A quizDto object representing the quiz.
    */
+  @CrossOrigin(origins = "*")
   @GetMapping(path = "/{quizId}")
   public ResponseEntity<QuizDto> getQuiz(@PathVariable String quizId) {
     if (quizService.findQuizDtoById(quizId) == null) {
