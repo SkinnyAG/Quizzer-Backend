@@ -130,4 +130,18 @@ public class UserServiceImpl implements UserService {
     user.setEmail(newEmail);
     userRepository.save(user);
   }
+
+  /**
+   * Updates the email address of a user.
+   *
+   * @param username the username of the user whose full name is to be updated.
+   * @param newFullName the new full name to set for the user.
+   */
+  @Transactional
+  public void updateUserFullName(String username, String newFullName) {
+    UserEntity user = userRepository.findById(username)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+    user.setFullName(newFullName);
+    userRepository.save(user);
+  }
 }

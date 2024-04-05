@@ -36,6 +36,20 @@ public interface UserService {
 
   Boolean checkCredentials(LoginDto userToBeChecked);
 
+  /**
+   * Service for updating a users email.
+   *
+   * @param username The chosen user.
+   * @param newEmail The new mail for the chosen user.
+   */
   void updateUserEmail(String username, String newEmail);
+
+  /**
+   * Service for updating a users full name.
+   *
+   * @param username The chosen user.
+   * @param newFullName The new full name for the chosen user.
+   */
+  void updateUserFullName(String username, String newFullName);
 
 }

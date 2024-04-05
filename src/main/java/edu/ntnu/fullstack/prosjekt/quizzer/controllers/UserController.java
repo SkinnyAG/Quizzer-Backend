@@ -93,6 +93,13 @@ public class UserController {
     return new ResponseEntity<>(foundUserDto, HttpStatus.OK);
   }
 
+  /**
+   * Endpoint for updating a users email.
+   *
+   * @param username the chosen user for mail update.
+   * @param userDto DTO containing the new mail.
+   * @return A response entity with either a not authorized message, or ok-message.
+   */
   @PostMapping("/{username}/update-email")
   public ResponseEntity<String> updateUserEmail(@PathVariable("username") String username, @RequestBody UserDto userDto) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -107,5 +114,25 @@ public class UserController {
     }
   }
 
+  /**
+   * Endpoint for updating a users full name.
+   *
+   * @param username the chosen user for the full name update.
+   * @param userDto DTO containing the new full name.
+   * @return A response entity with either a not authorized message, or ok-message.
+   */
+  @PostMapping("/{username}/update-fullname")
+  public ResponseEntity<String> updateUserFullName(@PathVariable("username") String username, @RequestBody UserDto userDto) {
+    String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+    if (!username.equals(authenticatedUsername)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
+    }
+    try {
+      userService.updateUserFullName(username, userDto.getFullName());
+      return ResponseEntity.ok("User full name updated successfully");
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the email", e);
+    }
+  }
 }
 
