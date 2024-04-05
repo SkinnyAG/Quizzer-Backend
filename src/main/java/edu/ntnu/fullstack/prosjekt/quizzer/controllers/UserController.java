@@ -6,12 +6,14 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import java.util.Optional;
-
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Base endpoint is /api/users/
  */
 @Log
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
@@ -85,6 +87,7 @@ public class UserController {
    * @param loginUser The sign in information of the user.
    * @return A response with a status code and message. Fails if credentials are incorrect.
    */
+
   @PostMapping(path = "/login")
   public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginUser) {
     try {
@@ -98,4 +101,22 @@ public class UserController {
       return ResponseEntity.badRequest().body("An error occurred");
     }
   }
+
+  /**
+   * Endpoint for getting user information.
+   *
+   * @param username the chosen user to gather information from.
+   * @return A response entity with either a not authorized message, or the user.
+   */
+  @GetMapping("/{username}")
+  public ResponseEntity<?> getUser(@PathVariable("username") String username) {
+    String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+    if (!username.equals(authenticatedUsername)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to view this information");
+    }
+    return userService.findByUsername(username)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 }
+
