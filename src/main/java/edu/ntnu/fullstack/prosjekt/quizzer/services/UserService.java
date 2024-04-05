@@ -31,5 +31,5 @@ public interface UserService {
    */
   UserEntity findByUsername(String username);
 
-    Boolean checkCredentials (LoginDTO userToBeChecked);
+  Boolean checkCredentials(LoginDTO userToBeChecked);
 }

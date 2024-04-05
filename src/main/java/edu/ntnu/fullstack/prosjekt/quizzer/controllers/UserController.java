@@ -113,9 +113,9 @@ public class UserController {
     if (!username.equals(authenticatedUsername)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to view this information");
     }
-    return userService.findByUsername(username)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
+    UserEntity foundUser = userService.findByUsername(username);
+    UserDto foundUserDto = userMapper.mapTo(foundUser);
+    return new ResponseEntity<>(foundUserDto, HttpStatus.OK);
   }
 }
 

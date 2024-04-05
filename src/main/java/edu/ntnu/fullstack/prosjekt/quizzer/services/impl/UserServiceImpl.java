@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
   /**
    * Used for Dependency Injection.
    *
-   * @param userRepository The injected UserRepository object.
+   * @param userRepository  The injected UserRepository object.
    * @param passwordEncoder The injected PasswordEncoder object,
    *                        used for salting and hashing passwords.
    */
@@ -46,12 +46,12 @@ public class UserServiceImpl implements UserService {
    * @return true if hashed + salted password match, false if not.
    */
   @Override
-    public Boolean checkCredentials(LoginDTO userToBeChecked) {
+  public Boolean checkCredentials(LoginDTO userToBeChecked) {
     //TODO: fikse litt exception handling
-        Optional<UserEntity> userEntity = findByUsername(userToBeChecked.getUsername());
-        return passwordEncoder.matches(userToBeChecked.getPassword(),
-            userEntity.get().getPassword());
-    }
+    UserEntity userEntity = findByUsername(userToBeChecked.getUsername());
+    return passwordEncoder.matches(userToBeChecked.getPassword(),
+            userEntity.getPassword());
+  }
 
   /**
    * Creates a user and hashes its password before storing it in the database.
@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserEntity findByUsername(String username) {
     if (userRepository.findById(username).isPresent()) {
-      log.info("User: " + userRepository.findById(username).get());
       return userRepository.findById(username).get();
     }
     return null;
