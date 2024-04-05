@@ -66,18 +66,12 @@ public class QuizServiceImpl implements QuizService {
       log.info("Could not find user");
       throw new IllegalArgumentException("No user with username: " + quizDto.getOwner());
     }
-    log.info("Past checks");
     QuizEntity quizEntity = quizMapper.mapFrom(quizDto);
-    log.info("Entity: " + quizEntity);
-    log.info("Owner: " + userEntity);
-    log.info("Mapped");
     quizEntity.setOwner(userEntity);
-    log.info("User: " + userEntity);
-    log.info("Owner set");
 
+    QuizEntity savedQuizEntity = quizRepository.save(quizEntity);
 
-    quizRepository.save(quizEntity);
-    return null;
+    return quizMapper.mapTo(savedQuizEntity);
   }
 
   /**
@@ -101,6 +95,7 @@ public class QuizServiceImpl implements QuizService {
     Long idValue = Long.parseLong(quizId);
     if (quizRepository.findById(idValue).isPresent()) {
       QuizEntity quizEntity = quizRepository.findById(idValue).get();
+      QuizDto foundQuizDto = quizMapper.mapTo(quizEntity);
       return quizMapper.mapTo(quizEntity);
     }
     return null;

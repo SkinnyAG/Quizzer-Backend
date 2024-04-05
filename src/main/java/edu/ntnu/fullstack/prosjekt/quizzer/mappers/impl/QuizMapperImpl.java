@@ -34,7 +34,11 @@ public class QuizMapperImpl implements Mapper<QuizEntity, QuizDto> {
    */
   @Override
   public QuizDto mapTo(QuizEntity quizEntity) {
-    return modelMapper.map(quizEntity, QuizDto.class);
+    QuizDto quizDto = modelMapper.map(quizEntity, QuizDto.class);
+    if (quizEntity.getOwner() != null) {
+      quizDto.setOwner(quizEntity.getOwner().getUsername());
+    }
+    return quizDto;
   }
 
   /**
