@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDTO;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.UserRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
@@ -36,6 +37,21 @@ public class UserServiceImpl implements UserService {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
   }
+
+
+  /**
+   * Method for checking a loginDTOs credentials against a user.
+   *
+   * @param userToBeChecked the user to be checked.
+   * @return true if hashed + salted password match, false if not.
+   */
+  @Override
+    public Boolean checkCredentials(LoginDTO userToBeChecked) {
+    //TODO: fikse litt exception handling
+        Optional<UserEntity> userEntity = findByUsername(userToBeChecked.getUsername());
+        return passwordEncoder.matches(userToBeChecked.getPassword(),
+            userEntity.get().getPassword());
+    }
 
   /**
    * Creates a user and hashes its password before storing it in the database.
