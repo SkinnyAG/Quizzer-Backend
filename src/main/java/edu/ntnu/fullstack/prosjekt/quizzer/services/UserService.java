@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDTO;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 
 /**
@@ -10,18 +11,18 @@ public interface UserService {
   /**
    * Service for adding users to the database.
    *
-   * @param userEntity The UserEntity object to be added.
-   * @return The added UserEntity object.
+   * @param userDto The UserDto object to be added.
+   * @return The added UserDto object.
    */
-  UserEntity createUser(UserEntity userEntity);
+  UserDto createUser(UserDto userDto);
 
   /**
    * Service for checking if a user exists in the database.
    *
-   * @param userEntity The UserEntity object to check for.
+   * @param userDto The UserDto object to check for.
    * @return A true or false value for the user existing.
    */
-  Boolean userExists(UserEntity userEntity);
+  Boolean userExists(UserDto userDto);
 
   /**
    * Service for finding a user by its unique username.
@@ -29,7 +30,9 @@ public interface UserService {
    * @param username Username of the user to locate.
    * @return A value containing the UserEntity object.
    */
-  UserEntity findByUsername(String username);
+  UserDto findDtoByUsername(String username);
 
-  Boolean checkCredentials(LoginDTO userToBeChecked);
+  UserEntity findEntityByUsername(String username);
+
+  Boolean checkCredentials(LoginDto userToBeChecked);
 }

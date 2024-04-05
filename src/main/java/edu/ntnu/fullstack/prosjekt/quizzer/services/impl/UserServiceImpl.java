@@ -1,12 +1,15 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDTO;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
+import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.UserRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 /**
  * A class implementing the methods specified in its interface.
@@ -24,6 +27,11 @@ public class UserServiceImpl implements UserService {
   /**
    * Used for Dependency Injection.
    */
+  private Mapper<UserEntity, UserDto> userMapper;
+
+  /**
+   * Used for Dependency Injection.
+   */
   private PasswordEncoder passwordEncoder;
 
   /**
@@ -33,8 +41,10 @@ public class UserServiceImpl implements UserService {
    * @param passwordEncoder The injected PasswordEncoder object,
    *                        used for salting and hashing passwords.
    */
-  public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+  public UserServiceImpl(UserRepository userRepository,
+                         Mapper<UserEntity, UserDto> userMapper, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.userMapper = userMapper;
     this.passwordEncoder = passwordEncoder;
   }
 
@@ -46,9 +56,9 @@ public class UserServiceImpl implements UserService {
    * @return true if hashed + salted password match, false if not.
    */
   @Override
-  public Boolean checkCredentials(LoginDTO userToBeChecked) {
+  public Boolean checkCredentials(LoginDto userToBeChecked) {
     //TODO: fikse litt exception handling
-    UserEntity userEntity = findByUsername(userToBeChecked.getUsername());
+    UserEntity userEntity = findEntityByUsername(userToBeChecked.getUsername());
     return passwordEncoder.matches(userToBeChecked.getPassword(),
             userEntity.getPassword());
   }
@@ -56,24 +66,30 @@ public class UserServiceImpl implements UserService {
   /**
    * Creates a user and hashes its password before storing it in the database.
    *
-   * @param userEntity The UserEntity object to be added.
-   * @return The created UserEntity object.
+   * @param userDto The UserDto object to be added.
+   * @return The created UserDto object.
    */
   @Override
-  public UserEntity createUser(UserEntity userEntity) {
-    String hashedPassword = passwordEncoder.encode(userEntity.getPassword());
-    userEntity.setPassword(hashedPassword);
-    return userRepository.save(userEntity);
+  public UserDto createUser(UserDto userDto) {
+    if (userExists(userDto)) {
+      UserEntity userEntity = userMapper.mapFrom(userDto);
+      String hashedPassword = passwordEncoder.encode(userEntity.getPassword());
+      userEntity.setPassword(hashedPassword);
+      UserEntity savedUserEntity = userRepository.save(userEntity);
+      return userMapper.mapTo(savedUserEntity);
+    }
+    throw new IllegalArgumentException("User already exists");
   }
 
   /**
    * Checks if a user exists in the database.
    *
-   * @param userEntity The UserEntity object to check for.
+   * @param userDto The UserDto object to check for.
    * @return A true of false value for the user existing.
    */
   @Override
-  public Boolean userExists(UserEntity userEntity) {
+  public Boolean userExists(UserDto userDto) {
+    UserEntity userEntity = userMapper.mapFrom(userDto);
     return userRepository.existsById(userEntity.getUsername());
   }
 
@@ -81,10 +97,19 @@ public class UserServiceImpl implements UserService {
    * Finds a user by its unique username.
    *
    * @param username Username of the user to locate.
-   * @return An optional value containing the UserEntity object.
+   * @return A Dto representing the found user.
    */
   @Override
-  public UserEntity findByUsername(String username) {
+  public UserDto findDtoByUsername(String username) {
+    if (userRepository.findById(username).isPresent()) {
+      UserEntity foundUserEntity = userRepository.findById(username).get();
+      return userMapper.mapTo(foundUserEntity);
+    }
+    return null;
+  }
+
+  @Override
+  public UserEntity findEntityByUsername(String username) {
     if (userRepository.findById(username).isPresent()) {
       return userRepository.findById(username).get();
     }

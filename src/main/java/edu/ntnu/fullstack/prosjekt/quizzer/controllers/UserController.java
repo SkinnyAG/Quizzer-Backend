@@ -1,9 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDTO;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
-import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -35,24 +33,16 @@ public class UserController {
   /**
    * Used for Dependency Injection.
    */
-  private Mapper<UserEntity, UserDto> userMapper;
-
-  /**
-   * Used for Dependency Injection.
-   */
   private PasswordEncoder passwordEncoder;
 
   /**
    * Used for Dependency Injection.
    *
    * @param userService The injected UserService object.
-   * @param userMapper The injected UserMapper object.
    * @param passwordEncoder The injected PasswordEncoder object for comparing passwords.
    */
-  public UserController(UserService userService, Mapper<UserEntity, UserDto> userMapper,
-                        PasswordEncoder passwordEncoder) {
+  public UserController(UserService userService, PasswordEncoder passwordEncoder) {
     this.userService = userService;
-    this.userMapper = userMapper;
     this.passwordEncoder = passwordEncoder;
   }
 
@@ -66,13 +56,7 @@ public class UserController {
   public ResponseEntity<?> createUser(@RequestBody UserDto user) {
     log.info("Received register request from user: " + user);
     try {
-      UserEntity userEntity = userMapper.mapFrom(user);
-      //Check if user already exists
-      if (userService.userExists(userEntity)) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists!");
-      }
-      UserEntity savedUserEntity = userService.createUser(userEntity);
-      UserDto savedUserDto = userMapper.mapTo(savedUserEntity);
+      UserDto savedUserDto = userService.createUser(user);
       return new ResponseEntity<>(savedUserDto, HttpStatus.CREATED);
 
     } catch (Exception e) {
@@ -88,10 +72,9 @@ public class UserController {
    */
 
   @PostMapping(path = "/login")
-  public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginUser) {
+  public ResponseEntity<?> loginUser(@RequestBody LoginDto loginUser) {
     try {
-      UserEntity userEntity = userService.findByUsername(loginUser.getUsername());
-      if (passwordEncoder.matches(loginUser.getPassword(), userEntity.getPassword())) {
+      if (userService.checkCredentials(loginUser)) {
         return ResponseEntity.ok("User authenticated successfully");
       } else {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -111,10 +94,10 @@ public class UserController {
   public ResponseEntity<?> getUser(@PathVariable("username") String username) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     if (!username.equals(authenticatedUsername)) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to view this information");
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+              "You are not authorized to view this information");
     }
-    UserEntity foundUser = userService.findByUsername(username);
-    UserDto foundUserDto = userMapper.mapTo(foundUser);
+    UserDto foundUserDto = userService.findDtoByUsername(username);
     return new ResponseEntity<>(foundUserDto, HttpStatus.OK);
   }
 }
