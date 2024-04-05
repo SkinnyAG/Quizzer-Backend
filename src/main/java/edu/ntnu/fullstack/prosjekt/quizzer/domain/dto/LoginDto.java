@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * A loginDto representing a login attempt containing username and password.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
+public class LoginDto {
   private String username;
 
   private String password;

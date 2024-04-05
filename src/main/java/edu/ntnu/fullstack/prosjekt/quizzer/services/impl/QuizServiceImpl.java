@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
@@ -61,7 +62,7 @@ public class QuizServiceImpl implements QuizService {
       throw new IllegalArgumentException("Undefined quiz title");
     }
 
-    UserEntity userEntity = userService.findByUsername(quizDto.getOwner());
+    UserEntity userEntity = userService.findEntityByUsername(quizDto.getOwner());
     if (userEntity == null) {
       log.info("Could not find user");
       throw new IllegalArgumentException("No user with username: " + quizDto.getOwner());
