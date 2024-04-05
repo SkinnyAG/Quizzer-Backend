@@ -7,7 +7,6 @@ import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,18 +31,11 @@ public class UserController {
 
   /**
    * Used for Dependency Injection.
-   */
-  private PasswordEncoder passwordEncoder;
-
-  /**
-   * Used for Dependency Injection.
    *
    * @param userService The injected UserService object.
-   * @param passwordEncoder The injected PasswordEncoder object for comparing passwords.
    */
-  public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+  public UserController(UserService userService) {
     this.userService = userService;
-    this.passwordEncoder = passwordEncoder;
   }
 
   /**

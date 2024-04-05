@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public UserDto createUser(UserDto userDto) {
-    if (userExists(userDto)) {
+    if (!userExists(userDto)) {
       UserEntity userEntity = userMapper.mapFrom(userDto);
       String hashedPassword = passwordEncoder.encode(userEntity.getPassword());
       userEntity.setPassword(hashedPassword);

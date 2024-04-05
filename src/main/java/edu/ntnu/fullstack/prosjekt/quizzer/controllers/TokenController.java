@@ -5,9 +5,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
-import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import java.time.Duration;
 import java.time.Instant;
@@ -50,7 +47,7 @@ public class TokenController {
    * @return A JWT used to authenticate the user.
    * @throws Exception Throws an exception if the request is denied.
    */
-  @PostMapping(value = "")
+  @PostMapping()
   @ResponseStatus(value = HttpStatus.CREATED)
   public String generateToken(final @RequestBody LoginDto loginRequest) throws Exception {
     // if username and password are valid, issue an access token
