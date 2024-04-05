@@ -5,11 +5,13 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.TokenDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import java.time.Duration;
 import java.time.Instant;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,11 +51,11 @@ public class TokenController {
    */
   @PostMapping()
   @ResponseStatus(value = HttpStatus.CREATED)
-  public String generateToken(final @RequestBody LoginDto loginRequest) throws Exception {
+  public ResponseEntity<TokenDto> generateToken(final @RequestBody LoginDto loginRequest) throws Exception {
     // if username and password are valid, issue an access token
 
     if (userService.checkCredentials(loginRequest)) {
-      return generateToken(loginRequest.getUsername());
+      return new ResponseEntity<>(new TokenDto(generateToken(loginRequest.getUsername())), HttpStatus.OK);
     }
 
     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,

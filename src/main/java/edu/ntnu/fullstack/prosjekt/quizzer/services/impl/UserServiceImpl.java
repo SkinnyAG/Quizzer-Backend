@@ -9,6 +9,7 @@ import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -114,5 +115,48 @@ public class UserServiceImpl implements UserService {
       return userRepository.findById(username).get();
     }
     return null;
+  }
+
+  /**
+      * Updates the email address of a user.
+      *
+      * @param username the username of the user whose email is to be updated.
+      * @param newEmail the new email to set for the user.
+      */
+  @Transactional
+  public void updateUserEmail(String username, String newEmail) {
+    UserEntity user = userRepository.findById(username)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+    user.setEmail(newEmail);
+    userRepository.save(user);
+  }
+
+  /**
+   * Updates the email address of a user.
+   *
+   * @param username the username of the user whose full name is to be updated.
+   * @param newFullName the new full name to set for the user.
+   */
+  @Transactional
+  public void updateUserFullName(String username, String newFullName) {
+    UserEntity user = userRepository.findById(username)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+    user.setFullName(newFullName);
+    userRepository.save(user);
+  }
+
+  /**
+   * Updates the password of a user.
+   *
+   * @param username the username of the user whose full name is to be updated.
+   * @param newPassword the new password to set for the user.
+   */
+  @Transactional
+  public void updateUserPassword(String username, String newPassword) {
+    UserEntity user = userRepository.findById(username)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+    String newHashedPassword = passwordEncoder.encode(newPassword);
+    user.setPassword(newHashedPassword);
+    userRepository.save(user);
   }
 }

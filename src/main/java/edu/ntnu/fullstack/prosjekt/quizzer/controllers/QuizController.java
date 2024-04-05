@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 
 /**
  * Rest Controller for managing requests relating to quiz database operations.
@@ -40,15 +42,14 @@ public class QuizController {
    * @return A response with a status code and message. Fails necessary fields are missing.
    */
   @PostMapping()
-  public ResponseEntity<?> createQuiz(@RequestBody QuizDto quizDto) {
+  public ResponseEntity<QuizDto> createQuiz(@RequestBody QuizDto quizDto) {
     log.info("Request to createQuiz received with quiz: " + quizDto);
     try {
       QuizDto responseDto = quizService.createQuiz(quizDto);
-
       return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     } catch (Exception e) {
       log.info("An unforeseen error occurred");
-      return ResponseEntity.badRequest().body("An unforeseen error occurred.");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
     }
   }
 
@@ -66,8 +67,9 @@ public class QuizController {
    * @param pageable Pagination parameters such as page size, number and sorting.
    * @return Response with a status code and message.
    */
+  @CrossOrigin(origins = "*")
   @GetMapping()
-  public ResponseEntity<?> getPageOfQuizzes(Pageable pageable) {
+  public ResponseEntity<Page<QuizDto>> getPageOfQuizzes(Pageable pageable) {
     log.info("Client requesting quiz page");
     Page<QuizDto> quizDtoPage = quizService.findPageOfQuizzes(pageable);
     return new ResponseEntity<>(quizDtoPage, HttpStatus.OK);
@@ -81,7 +83,7 @@ public class QuizController {
    */
   /*
   @GetMapping(path = "/{quizId}")
-  public ResponseEntity<?> getQuiz(@PathVariable String quizId) {
+  public ResponseEntity<QuizDto> getQuiz(@PathVariable String quizId) {
     if (quizService.findQuizDtoById(quizId) == null) {
       return ResponseEntity.notFound().build();
     }
