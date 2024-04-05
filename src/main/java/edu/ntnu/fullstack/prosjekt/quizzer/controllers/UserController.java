@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Rest Controller used for managing requests relating to user database operations.
@@ -45,14 +46,14 @@ public class UserController {
    * @return A response with a status code and message. Fails if user already exists.
    */
   @PostMapping(path = "/register")
-  public ResponseEntity<?> createUser(@RequestBody UserDto user) {
+  public ResponseEntity<UserDto> createUser(@RequestBody UserDto user) {
     log.info("Received register request from user: " + user);
     try {
       UserDto savedUserDto = userService.createUser(user);
       return new ResponseEntity<>(savedUserDto, HttpStatus.CREATED);
 
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body("An error occurred");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
     }
   }
 
@@ -64,7 +65,7 @@ public class UserController {
    */
 
   @PostMapping(path = "/login")
-  public ResponseEntity<?> loginUser(@RequestBody LoginDto loginUser) {
+  public ResponseEntity<String> loginUser(@RequestBody LoginDto loginUser) {
     try {
       if (userService.checkCredentials(loginUser)) {
         return ResponseEntity.ok("User authenticated successfully");
@@ -72,7 +73,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
       }
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body("An error occurred");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
     }
   }
 
@@ -83,11 +84,10 @@ public class UserController {
    * @return A response entity with either a not authorized message, or the user.
    */
   @GetMapping("/{username}")
-  public ResponseEntity<?> getUser(@PathVariable("username") String username) {
+  public ResponseEntity<UserDto> getUser(@PathVariable("username") String username) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     if (!username.equals(authenticatedUsername)) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-              "You are not authorized to view this information");
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to view this information");
     }
     UserDto foundUserDto = userService.findDtoByUsername(username);
     return new ResponseEntity<>(foundUserDto, HttpStatus.OK);

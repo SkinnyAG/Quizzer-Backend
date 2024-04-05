@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Rest Controller used for managing requests relating to question database operations.
@@ -39,14 +40,14 @@ public class QuestionController {
    * @return A response with a status code and message. Fails if question misses necessary fields.
    */
   @PostMapping()
-  public ResponseEntity<?> addQuestion(@RequestBody QuestionDto questionDto) {
+  public ResponseEntity<QuestionDto> addQuestion(@RequestBody QuestionDto questionDto) {
     log.info("Received request addQuestion for question: " + questionDto);
     try {
 
       QuestionDto savedQuestionDto = questionService.createQuestion(questionDto);
       return new ResponseEntity<>(savedQuestionDto, HttpStatus.CREATED);
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body("An unforeseen error occurred");
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
     }
   }
 }
