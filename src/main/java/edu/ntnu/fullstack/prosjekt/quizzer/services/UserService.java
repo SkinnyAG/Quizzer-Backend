@@ -30,7 +30,7 @@ public interface UserService {
    * @param username Username of the user to locate.
    * @return An optional value containing the UserEntity object.
    */
-  Optional<UserEntity> findByUsername(String username);
+  UserEntity findByUsername(String username);
 
-    Boolean checkCredentials (LoginDTO userToBeChecked);
+  Boolean checkCredentials(LoginDTO userToBeChecked);
 }
