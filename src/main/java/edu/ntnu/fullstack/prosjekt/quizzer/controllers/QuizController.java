@@ -52,11 +52,11 @@ public class QuizController {
     }
   }
 
-  @PatchMapping()
-  public ResponseEntity<?> addQuestionToQuiz(@RequestBody QuestionDto questionDto) throws JsonProcessingException {
+  @PatchMapping(path = "/{quizId}")
+  public ResponseEntity<?> addQuestionToQuiz(@PathVariable String quizId, @RequestBody QuestionDto questionDto) throws JsonProcessingException {
     log.info("Testiiing");
     log.info("Received: " + questionDto);
-    QuestionDto responseDto = quizService.addQuestionToQuiz(questionDto);
+    QuestionDto responseDto = quizService.addQuestionToQuiz(quizId, questionDto);
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 

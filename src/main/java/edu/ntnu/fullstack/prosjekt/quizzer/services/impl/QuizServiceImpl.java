@@ -87,10 +87,9 @@ public class QuizServiceImpl implements QuizService {
   }
 
   @Override
-  public QuestionDto addQuestionToQuiz(QuestionDto questionDto) throws JsonProcessingException {
-    if (quizRepository.findById(Long.parseLong(questionDto.getQuizId())).isPresent()) {
-      QuizEntity quizEntity = quizRepository.findById(Long.parseLong(
-              questionDto.getQuizId())).get();
+  public QuestionDto addQuestionToQuiz(String quizId, QuestionDto questionDto) throws JsonProcessingException {
+    if (quizRepository.findById(Long.parseLong(quizId)).isPresent()) {
+      QuizEntity quizEntity = quizRepository.findById(Long.parseLong(quizId)).get();
       return questionService.createQuestion(quizEntity, questionDto);
     }
     return null;

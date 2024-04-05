@@ -19,7 +19,7 @@ public interface QuizService {
    */
   QuizDto createQuiz(QuizDto quizDto);
 
-  QuestionDto addQuestionToQuiz(QuestionDto questionDto) throws JsonProcessingException;
+  QuestionDto addQuestionToQuiz(String quizId, QuestionDto questionDto) throws JsonProcessingException;
 
   /**
    * Service for finding a page of quizzes in the database.
