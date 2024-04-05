@@ -1,6 +1,5 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.dto;
 
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +25,11 @@ public class QuestionDto {
   private String label;
 
   /**
+   * Links to an image for the quiz.
+   */
+  private String imageLink;
+
+  /**
    * The position field should tell the question which position it will have in an ordered quiz,
    * which will be randomized if wanted.
    */
@@ -41,5 +45,5 @@ public class QuestionDto {
    * The quiz field references which quiz the question belongs to, in a many questions to
    * one quiz relationship.
    */
-  private QuizEntity quiz;
+  private String quizId;
 }

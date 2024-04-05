@@ -2,7 +2,6 @@ package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDTO;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
-import java.util.Optional;
 
 /**
  * Interface providing services between the user database table and user requests.
@@ -28,7 +27,7 @@ public interface UserService {
    * Service for finding a user by its unique username.
    *
    * @param username Username of the user to locate.
-   * @return An optional value containing the UserEntity object.
+   * @return A value containing the UserEntity object.
    */
   UserEntity findByUsername(String username);
 

@@ -4,7 +4,7 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDTO;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.UserRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
-import java.util.Optional;
+import lombok.extern.java.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
  * A class implementing the methods specified in its interface.
  * Provides services between user requests and database operations.
  */
+@Log
 @Service
 public class UserServiceImpl implements UserService {
 

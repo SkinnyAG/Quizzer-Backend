@@ -1,6 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.dto;
 
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,8 +30,13 @@ public class QuizDto {
   private String description;
 
   /**
+   * Links to an image for the quiz.
+   */
+  private String imageLink = "";
+
+  /**
    * The owner field should represent the user who owns the quiz, with many quizzes belonging to
    * one user. This field is a foreign key linking owner and quizzes.
    */
-  private UserEntity owner;
+  private String owner;
 }
