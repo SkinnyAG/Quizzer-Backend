@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -40,11 +41,4 @@ public class UserEntity {
    * The password field represents the salted and hashed password of the user.
    */
   private String password;
-
-  /**
-   * The quizzes field represents the quizzes a user has created, with a user being
-   * able to have many quizzes in a 'one to many' relationship.
-   */
-  @OneToMany (mappedBy = "owner")
-  private List<QuizEntity> quizzes;
 }

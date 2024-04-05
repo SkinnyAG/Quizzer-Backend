@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,21 +47,14 @@ public class QuizEntity {
   /**
    * Links to an image for the quiz.
    */
-  private String imageLink;
+  private String imageLink = "";
 
   /**
    * The owner field should represent the user who owns the quiz, with many quizzes belonging to
    * one user. This field is a foreign key linking owner and quizzes.
    */
   @ManyToOne
+  @JsonBackReference
   @JoinColumn(name = "username")
   private UserEntity owner;
-
-  /**
-   * The questions field should represent the questions within a quiz, with one quiz having
-   * multiple questions. This field is a foreign key linking a quiz and its questions.
-   */
-  @OneToMany (mappedBy = "quiz")
-  private List<QuestionEntity> questions;
-
 }

@@ -46,7 +46,6 @@ public class QuestionController {
       QuestionDto savedQuestionDto = questionService.createQuestion(questionDto);
       return new ResponseEntity<>(savedQuestionDto, HttpStatus.CREATED);
     } catch (Exception e) {
-      System.out.println(e);
       return ResponseEntity.badRequest().body("An unforeseen error occurred");
     }
   }

@@ -54,20 +54,30 @@ public class QuizServiceImpl implements QuizService {
    */
   @Override
   public QuizDto createQuiz(QuizDto quizDto) {
+    log.info("Creating quiz");
 
     if (quizDto.getTitle() == null || quizDto.getTitle().isEmpty()) {
+      log.info("Undefined quiz title");
       throw new IllegalArgumentException("Undefined quiz title");
     }
 
     UserEntity userEntity = userService.findByUsername(quizDto.getOwner());
     if (userEntity == null) {
+      log.info("Could not find user");
       throw new IllegalArgumentException("No user with username: " + quizDto.getOwner());
     }
+    log.info("Past checks");
     QuizEntity quizEntity = quizMapper.mapFrom(quizDto);
+    log.info("Entity: " + quizEntity);
+    log.info("Owner: " + userEntity);
+    log.info("Mapped");
     quizEntity.setOwner(userEntity);
+    log.info("User: " + userEntity);
+    log.info("Owner set");
+
 
     quizRepository.save(quizEntity);
-    return quizMapper.mapTo(quizEntity);
+    return null;
   }
 
   /**
