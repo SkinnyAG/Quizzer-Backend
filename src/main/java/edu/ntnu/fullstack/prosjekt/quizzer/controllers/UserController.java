@@ -92,5 +92,20 @@ public class UserController {
     UserDto foundUserDto = userService.findDtoByUsername(username);
     return new ResponseEntity<>(foundUserDto, HttpStatus.OK);
   }
+
+  @PostMapping("/{username}/update-email")
+  public ResponseEntity<String> updateUserEmail(@PathVariable("username") String username, @RequestBody UserDto userDto) {
+    String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+    if (!username.equals(authenticatedUsername)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
+    }
+    try {
+      userService.updateUserEmail(username, userDto.getEmail());
+      return ResponseEntity.ok("User email updated successfully");
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the email", e);
+    }
+  }
+
 }
 

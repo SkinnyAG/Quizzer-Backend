@@ -35,4 +35,7 @@ public interface UserService {
   UserEntity findEntityByUsername(String username);
 
   Boolean checkCredentials(LoginDto userToBeChecked);
+
+  void updateUserEmail(String username, String newEmail);
+
 }
