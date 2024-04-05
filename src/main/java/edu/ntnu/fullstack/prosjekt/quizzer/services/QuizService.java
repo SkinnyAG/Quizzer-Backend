@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,8 @@ public interface QuizService {
    * @return The created QuizDto.
    */
   QuizDto createQuiz(QuizDto quizDto);
+
+  QuestionDto addQuestionToQuiz(QuestionDto questionDto);
 
   /**
    * Service for finding a page of quizzes in the database.
@@ -40,4 +43,5 @@ public interface QuizService {
    */
   QuizEntity findQuizEntityById(String quizId);
 
+  QuizDto findQuizDetails(String quizId);
 }

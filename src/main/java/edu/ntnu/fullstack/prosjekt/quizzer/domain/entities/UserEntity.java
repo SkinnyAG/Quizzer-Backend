@@ -41,4 +41,5 @@ public class UserEntity {
    * The password field represents the salted and hashed password of the user.
    */
   private String password;
+
 }

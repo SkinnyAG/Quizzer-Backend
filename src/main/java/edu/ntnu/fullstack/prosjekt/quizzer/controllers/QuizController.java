@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import lombok.extern.java.Log;
@@ -7,12 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Rest Controller for managing requests relating to quiz database operations.
@@ -55,6 +51,14 @@ public class QuizController {
     }
   }
 
+  @PatchMapping()
+  public ResponseEntity<?> addQuestionToQuiz(@RequestBody QuestionDto questionDto) {
+    log.info("Testiiing");
+    log.info("Received: " + questionDto);
+    QuestionDto responseDto = quizService.addQuestionToQuiz(questionDto);
+    return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+  }
+
   /**
    * Endpoint that gets a page of quizzes.
    *
@@ -79,8 +83,14 @@ public class QuizController {
     if (quizService.findQuizDtoById(quizId) == null) {
       return ResponseEntity.notFound().build();
     }
-    QuizDto respnseQuizDto = quizService.findQuizDtoById(quizId);
-    return new ResponseEntity<>(respnseQuizDto, HttpStatus.OK);
+    QuizDto responseQuizDto = quizService.findQuizDtoById(quizId);
+    return new ResponseEntity<>(responseQuizDto, HttpStatus.OK);
   }
 
+  @GetMapping(path = "/{quizId}/details")
+  public ResponseEntity<?> getQuizDetails(@PathVariable String quizId) {
+    QuizDto quizDto = quizService.findQuizDetails(quizId);
+    log.info("Received questions: " + quizDto);
+    return new ResponseEntity<>(quizDto, HttpStatus.OK);
+  }
 }

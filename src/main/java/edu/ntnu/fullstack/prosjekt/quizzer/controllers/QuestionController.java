@@ -2,6 +2,7 @@ package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
+import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class QuestionController {
    */
   private QuestionService questionService;
 
+
   /**
    * Used for Dependency Injection.
    *
@@ -38,15 +40,15 @@ public class QuestionController {
    * @param questionDto The question to create.
    * @return A response with a status code and message. Fails if question misses necessary fields.
    */
+  /*
   @PostMapping()
   public ResponseEntity<?> addQuestion(@RequestBody QuestionDto questionDto) {
     log.info("Received request addQuestion for question: " + questionDto);
     try {
-
-      QuestionDto savedQuestionDto = questionService.createQuestion(questionDto);
+      QuestionDto savedQuestionDto =
       return new ResponseEntity<>(savedQuestionDto, HttpStatus.CREATED);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("An unforeseen error occurred");
     }
-  }
+  }*/
 }

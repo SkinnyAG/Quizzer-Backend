@@ -1,17 +1,23 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.QuizRepository;
+import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 /**
  * A class implementing the methods specified in its interface.
@@ -35,16 +41,20 @@ public class QuizServiceImpl implements QuizService {
    */
   private UserService userService;
 
+  private QuestionService questionService;
+
+
   /**
    * Used for Dependency Injection.
    *
    * @param quizRepository The Injected QuizRepository object.
    */
   public QuizServiceImpl(QuizRepository quizRepository, UserService userService,
-                         Mapper<QuizEntity, QuizDto> quizMapper) {
+                         QuestionService questionService, Mapper<QuizEntity, QuizDto> quizMapper) {
     this.quizRepository = quizRepository;
     this.quizMapper = quizMapper;
     this.userService = userService;
+    this.questionService = questionService;
   }
 
   /**
@@ -74,6 +84,17 @@ public class QuizServiceImpl implements QuizService {
 
     return quizMapper.mapTo(savedQuizEntity);
   }
+
+  @Override
+  public QuestionDto addQuestionToQuiz(QuestionDto questionDto) {
+    if (quizRepository.findById(Long.parseLong(questionDto.getQuizId())).isPresent()) {
+      QuizEntity quizEntity = quizRepository.findById(Long.parseLong(
+              questionDto.getQuizId())).get();
+      return questionService.createQuestion(quizEntity, questionDto);
+    }
+    return null;
+  }
+
 
   /**
    * Finds a page of quizzes in the database.
@@ -115,5 +136,14 @@ public class QuizServiceImpl implements QuizService {
       return quizRepository.findById(idValue).get();
     }
     return null;
+  }
+
+  @Override
+  public QuizDto findQuizDetails(String quizId) {
+    QuizEntity quizEntity = findQuizEntityById(quizId);
+    List<QuestionDto> questions = questionService.getQuestionsByQuiz(quizEntity);
+    QuizDto quizDto = quizMapper.mapTo(quizEntity);
+    quizDto.setQuestions(questions);
+    return quizDto;
   }
 }
