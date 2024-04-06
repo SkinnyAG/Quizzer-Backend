@@ -1,20 +1,20 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The QuizDto class is a mirror of the QuizEntity class, with the intention of creating
+ * The QuizDetailsDto class is a mirror of the QuizEntity class, with the intention of creating
  *  * a separation between user input/output and database objects.
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuizDto {
+public class QuizDetailsDto {
   /**
    * The quizId field is a unique identifier and primary key for a quiz entry in
    * the database.
@@ -42,5 +42,5 @@ public class QuizDto {
    */
   private UserDto owner;
   
-  private List<QuestionDto> questions;
+  private List<QuestionDto> questions = new ArrayList<>();
 }

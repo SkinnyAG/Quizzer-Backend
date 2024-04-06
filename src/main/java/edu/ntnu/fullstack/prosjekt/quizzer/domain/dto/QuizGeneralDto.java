@@ -20,7 +20,7 @@ public class QuizGeneralDto {
 
   private String imageLink;
 
-  private Long amountOfQuestions;
+  private int amountOfQuestions;
 
   private UserDto owner;
 }

@@ -2,8 +2,6 @@ package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 
 import java.util.List;
@@ -22,4 +20,5 @@ public interface QuestionService {
 
   List<QuestionDto> getQuestionsByQuiz(QuizEntity quizEntity);
 
+  int getAmountOfQuestionsByQuiz(QuizEntity quizEntity);
 }

@@ -4,13 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionAnswersDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.QuestionRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
-import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +81,11 @@ public class QuestionServiceImpl implements QuestionService {
             .mapTo(questionEntity)).toList();
     log.info("After mapping to dto: " + questionDtos);
     return questionDtos;
+  }
+
+  @Override
+  public int getAmountOfQuestionsByQuiz(QuizEntity quizEntity) {
+    return questionRepository.findQuestionEntitiesByQuiz(quizEntity).size();
   }
 
   public QuestionDto mapFromJson(QuestionEntity questionEntity) {
