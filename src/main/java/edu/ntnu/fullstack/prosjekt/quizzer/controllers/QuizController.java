@@ -83,6 +83,13 @@ public class QuizController {
     return new ResponseEntity<>(quizDtoPage, HttpStatus.OK);
   }
 
+  @CrossOrigin(origins = "*")
+  @GetMapping(path = "/filter")
+  public ResponseEntity<Page<QuizGeneralDto>> getFilteredPageOfQuizzes(@RequestParam String searchQuery, Pageable pageable) {
+    Page<QuizGeneralDto> quizzesByCategories = quizService.filterQuizzes(searchQuery, pageable);
+    return new ResponseEntity<>(quizzesByCategories, HttpStatus.OK);
+  }
+
   /**
    * Endpoint that gets a specified quiz.
    *

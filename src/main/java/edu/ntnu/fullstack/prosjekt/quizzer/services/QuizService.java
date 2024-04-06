@@ -31,6 +31,8 @@ public interface QuizService {
    */
   Page<QuizGeneralDto> findPageOfQuizzes(Pageable pageable);
 
+  Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable);
+
   /**
    * Service for finding a specific quiz given an id.
    *

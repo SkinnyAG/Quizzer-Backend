@@ -1,9 +1,11 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.CategoryDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.CategoryEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A class implementing the methods specified in its interface.
@@ -38,6 +42,8 @@ public class QuizServiceImpl implements QuizService {
    */
   private Mapper<QuizEntity, QuizDetailsDto> quizMapper;
 
+  private Mapper<CategoryEntity, CategoryDto> categoryMapper;
+
   /**
    * Used for Dependency Injection.
    */
@@ -52,11 +58,13 @@ public class QuizServiceImpl implements QuizService {
    * @param quizRepository The Injected QuizRepository object.
    */
   public QuizServiceImpl(QuizRepository quizRepository, UserService userService,
-                         QuestionService questionService, Mapper<QuizEntity, QuizDetailsDto> quizMapper) {
+                         QuestionService questionService, Mapper<QuizEntity, QuizDetailsDto> quizMapper,
+                         Mapper<CategoryEntity, CategoryDto> categoryMapper) {
     this.quizRepository = quizRepository;
     this.quizMapper = quizMapper;
     this.userService = userService;
     this.questionService = questionService;
+    this.categoryMapper = categoryMapper;
   }
 
   /**
@@ -164,5 +172,14 @@ public class QuizServiceImpl implements QuizService {
     QuizDetailsDto quizDetailsDto = quizMapper.mapTo(quizEntity);
     quizDetailsDto.setQuestions(questions);
     return quizDetailsDto;
+  }
+
+  public Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable) {
+    Page<QuizEntity> quizEntityPage = quizRepository.findByCategoriesInOrTitleContaining(searchQuery, pageable);
+    return quizEntityPage.map(obj -> {
+      QuizGeneralDto converted = new ModelMapper().map(obj, QuizGeneralDto.class);
+      converted.setAmountOfQuestions(questionService.getAmountOfQuestionsByQuiz(obj));
+      return converted;
+    });
   }
 }

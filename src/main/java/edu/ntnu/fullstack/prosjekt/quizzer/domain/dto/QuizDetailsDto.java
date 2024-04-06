@@ -41,6 +41,8 @@ public class QuizDetailsDto {
    * one user. This field is a foreign key linking owner and quizzes.
    */
   private UserDto owner;
+
+  private List<CategoryDto> categories = new ArrayList<>();
   
   private List<QuestionDto> questions = new ArrayList<>();
 }
