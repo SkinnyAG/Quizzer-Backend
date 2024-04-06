@@ -1,16 +1,12 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.CategoryDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Interface providing services between the quiz database table and user requests.
@@ -33,7 +29,7 @@ public interface QuizService {
    */
   Page<QuizGeneralDto> findPageOfQuizzes(Pageable pageable);
 
-  Page<QuizGeneralDto> findQuizzesByCategories(String searchQuery, Pageable pageable);
+  Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable);
 
   /**
    * Service for finding a specific quiz given an id.

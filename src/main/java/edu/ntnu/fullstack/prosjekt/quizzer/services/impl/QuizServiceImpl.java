@@ -161,7 +161,7 @@ public class QuizServiceImpl implements QuizService {
     return quizDetailsDto;
   }
 
-  public Page<QuizGeneralDto> findQuizzesByCategories(String searchQuery, Pageable pageable) {
+  public Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable) {
     Page<QuizEntity> quizEntityPage = quizRepository.findByCategoriesInOrTitleContaining(searchQuery, pageable);
     return quizEntityPage.map(obj -> {
       QuizGeneralDto converted = new ModelMapper().map(obj, QuizGeneralDto.class);
