@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * The UserDto class is a mirror of the userEntity class, with the intention of creating
  * a separation between user input/output and database objects.
@@ -39,7 +41,8 @@ public class QuestionDto {
    * The alternatives field should store JSON with the different alternatives that
    * a user can answer.
    */
-  private String alternatives;
+
+  private List<QuestionAnswersDto> alternatives;
 
   /**
    * The quiz field references which quiz the question belongs to, in a many questions to

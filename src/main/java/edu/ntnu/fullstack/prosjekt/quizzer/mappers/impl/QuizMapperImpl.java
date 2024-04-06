@@ -1,16 +1,19 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.mappers.impl;
 
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
+import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 /**
  * A class implementing the Mapper interface, to map between QuizDTOs and QuizEntities.
  */
+@Log
 @Component
-public class QuizMapperImpl implements Mapper<QuizEntity, QuizDto> {
+public class QuizMapperImpl implements Mapper<QuizEntity, QuizDetailsDto> {
 
   /**
    * Used for Dependency Injection.
@@ -33,22 +36,23 @@ public class QuizMapperImpl implements Mapper<QuizEntity, QuizDto> {
    * @return Mapped QuizDTO object.
    */
   @Override
-  public QuizDto mapTo(QuizEntity quizEntity) {
-    QuizDto quizDto = modelMapper.map(quizEntity, QuizDto.class);
+  public QuizDetailsDto mapTo(QuizEntity quizEntity) {
+    QuizDetailsDto quizDetailsDto = modelMapper.map(quizEntity, QuizDetailsDto.class);
+    log.info("Quiz mapped: " + quizDetailsDto);
     if (quizEntity.getOwner() != null) {
-      quizDto.setOwner(quizEntity.getOwner().getUsername());
+      quizDetailsDto.setOwner(modelMapper.map(quizEntity.getOwner(), UserDto.class));
     }
-    return quizDto;
+    return quizDetailsDto;
   }
 
   /**
    * Method used for mapping from a QuizDTO to a QuizEntity.
    *
-   * @param quizDto QuizDto object that should be mapped.
+   * @param quizDetailsDto QuizDetailsDto object that should be mapped.
    * @return Mapped QuizEntity object.
    */
   @Override
-  public QuizEntity mapFrom(QuizDto quizDto) {
-    return modelMapper.map(quizDto, QuizEntity.class);
+  public QuizEntity mapFrom(QuizDetailsDto quizDetailsDto) {
+    return modelMapper.map(quizDetailsDto, QuizEntity.class);
   }
 }
