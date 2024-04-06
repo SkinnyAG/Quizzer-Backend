@@ -73,7 +73,7 @@ public class QuizServiceImpl implements QuizService {
       throw new IllegalArgumentException("Undefined quiz title");
     }
 
-    UserEntity userEntity = userService.findEntityByUsername(quizDto.getOwner());
+    UserEntity userEntity = userService.findEntityByUsername(quizDto.getOwner().getUsername());
     if (userEntity == null) {
       log.info("Could not find user");
       throw new IllegalArgumentException("No user with username: " + quizDto.getOwner());

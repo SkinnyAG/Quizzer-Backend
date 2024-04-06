@@ -81,18 +81,9 @@ public class QuizController {
    * @param quizId ID of the quiz
    * @return A quizDto object representing the quiz.
    */
-  /*
+  @CrossOrigin(origins = "*")
   @GetMapping(path = "/{quizId}")
-  public ResponseEntity<QuizDto> getQuiz(@PathVariable String quizId) {
-    if (quizService.findQuizDtoById(quizId) == null) {
-      return ResponseEntity.notFound().build();
-    }
-    QuizDto responseQuizDto = quizService.findQuizDtoById(quizId);
-    return new ResponseEntity<>(responseQuizDto, HttpStatus.OK);
-  }*/
-
-  @GetMapping(path = "/{quizId}")
-  public ResponseEntity<?> getQuizDetails(@PathVariable String quizId) {
+  public ResponseEntity<QuizDto> getQuizDetails(@PathVariable String quizId) {
     QuizDto quizDto = quizService.findQuizDetails(quizId);
     log.info("Received questions: " + quizDto);
     return new ResponseEntity<>(quizDto, HttpStatus.OK);

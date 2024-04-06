@@ -40,7 +40,7 @@ public class QuizDto {
    * The owner field should represent the user who owns the quiz, with many quizzes belonging to
    * one user. This field is a foreign key linking owner and quizzes.
    */
-  private String owner;
-
+  private UserDto owner;
+  
   private List<QuestionDto> questions;
 }
