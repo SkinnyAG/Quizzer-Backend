@@ -1,8 +1,9 @@
-package edu.ntnu.fullstack.prosjekt.quizzer.domain.entities;
+package edu.ntnu.fullstack.prosjekt.quizzer.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,14 +11,11 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table (name = "categories")
-public class CategoryEntity {
-  @Id
+@NoArgsConstructor
+public class CategoryDto {
   private String categoryName;
 
-  @ManyToMany
+  @JsonBackReference
   private Set<QuizEntity> quizzes;
 }

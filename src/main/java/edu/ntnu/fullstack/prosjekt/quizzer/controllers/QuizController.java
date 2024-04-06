@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.CategoryDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
@@ -10,8 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -74,6 +79,13 @@ public class QuizController {
     log.info("Client requesting quiz page");
     Page<QuizGeneralDto> quizDtoPage = quizService.findPageOfQuizzes(pageable);
     return new ResponseEntity<>(quizDtoPage, HttpStatus.OK);
+  }
+
+  @CrossOrigin(origins = "*")
+  @GetMapping(path = "/filter")
+  public ResponseEntity<Page<QuizGeneralDto>> getFilteredPageOfQuizzes(@RequestParam String searchQuery, Pageable pageable) {
+    Page<QuizGeneralDto> quizzesByCategories = quizService.findQuizzesByCategories(searchQuery, pageable);
+    return new ResponseEntity<>(quizzesByCategories, HttpStatus.OK);
   }
 
   /**
