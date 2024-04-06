@@ -12,6 +12,7 @@ import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.parameters.P;
@@ -103,8 +104,12 @@ public class QuizServiceImpl implements QuizService {
   @Override
   public Page<QuizGeneralDto> findPageOfQuizzes(Pageable pageable) {
     Page<QuizEntity> quizEntityPage = quizRepository.findAll(pageable);
-    Page<QuizGeneralDto> quizGeneralDtoPage = quizEntityPage.map(quizEntity -> mapEntityToGeneral(quizEntity));
-    return quizGeneralDtoPage;
+
+    return quizEntityPage.map(obj -> {
+      QuizGeneralDto converted = new ModelMapper().map(obj, QuizGeneralDto.class);
+      converted.setAmountOfQuestions(questionService.getAmountOfQuestionsByQuiz(obj));
+      return converted;
+    });
   }
 
   /**
@@ -146,13 +151,5 @@ public class QuizServiceImpl implements QuizService {
     QuizDetailsDto quizDetailsDto = quizMapper.mapTo(quizEntity);
     quizDetailsDto.setQuestions(questions);
     return quizDetailsDto;
-  }
-
-  public QuizGeneralDto mapEntityToGeneral(QuizEntity quizEntity) {
-    QuizDetailsDto quizDetailsDto = quizMapper.mapTo(quizEntity);
-    QuizGeneralDto quizGeneralDto = new QuizGeneralDto(quizEntity.getQuizId(), quizEntity.getTitle(),
-            quizEntity.getDescription(), quizEntity.getImageLink(), questionService.getAmountOfQuestionsByQuiz(quizEntity)
-              , quizDetailsDto.getOwner());
-    return quizGeneralDto;
   }
 }
