@@ -8,6 +8,8 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * Interface providing services between the quiz database table and user requests.
  */
@@ -44,6 +46,8 @@ public interface QuizService {
    * @return The quiz as an entity.
    */
   QuizEntity findQuizEntityById(String quizId);
+
+  void updateQuizEntity(QuizDetailsDto quizDetailsDto);
 
   QuizDetailsDto findQuizDetails(String quizId);
 }

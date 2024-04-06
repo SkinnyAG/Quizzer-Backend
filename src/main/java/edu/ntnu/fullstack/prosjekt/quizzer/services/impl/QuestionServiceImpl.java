@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionAnswersDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
@@ -87,6 +88,22 @@ public class QuestionServiceImpl implements QuestionService {
   public int getAmountOfQuestionsByQuiz(QuizEntity quizEntity) {
     return questionRepository.findQuestionEntitiesByQuiz(quizEntity).size();
   }
+
+  @Override
+  public void clearQuestionsByQuizEntity(QuizEntity quizEntity) {
+    List<QuestionEntity> questionEntities = questionRepository.findQuestionEntitiesByQuiz(quizEntity);
+    for (QuestionEntity questionEntity : questionEntities) {
+      questionRepository.deleteById(questionEntity.getQuestionId());
+    }
+  }
+
+  @Override
+  public void addListOfQuestions(List<QuestionDto> questionDtos, QuizEntity quizEntity) {
+    for (QuestionDto questionDto : questionDtos) {
+      createQuestion(quizEntity, questionDto);
+    }
+  }
+
 
   public QuestionDto mapFromJson(QuestionEntity questionEntity) {
     QuestionDto questionDto = questionMapper.mapTo(questionEntity);
