@@ -2,7 +2,8 @@ package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
@@ -38,14 +39,14 @@ public class QuizController {
   /**
    * Endpoint for creating a new quiz.
    *
-   * @param quizDto The quiz to be created.
+   * @param quizDetailsDto The quiz to be created.
    * @return A response with a status code and message. Fails necessary fields are missing.
    */
   @PostMapping()
-  public ResponseEntity<QuizDto> createQuiz(@RequestBody QuizDto quizDto) {
-    log.info("Request to createQuiz received with quiz: " + quizDto);
+  public ResponseEntity<QuizDetailsDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
+    log.info("Request to createQuiz received with quiz: " + quizDetailsDto);
     try {
-      QuizDto responseDto = quizService.createQuiz(quizDto);
+      QuizDetailsDto responseDto = quizService.createQuiz(quizDetailsDto);
       return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     } catch (Exception e) {
       log.info("An unforeseen error occurred");
@@ -69,9 +70,9 @@ public class QuizController {
    */
   @CrossOrigin(origins = "*")
   @GetMapping()
-  public ResponseEntity<Page<QuizDto>> getPageOfQuizzes(Pageable pageable) {
+  public ResponseEntity<Page<QuizGeneralDto>> getPageOfQuizzes(Pageable pageable) {
     log.info("Client requesting quiz page");
-    Page<QuizDto> quizDtoPage = quizService.findPageOfQuizzes(pageable);
+    Page<QuizGeneralDto> quizDtoPage = quizService.findPageOfQuizzes(pageable);
     return new ResponseEntity<>(quizDtoPage, HttpStatus.OK);
   }
 
@@ -83,9 +84,9 @@ public class QuizController {
    */
   @CrossOrigin(origins = "*")
   @GetMapping(path = "/{quizId}")
-  public ResponseEntity<QuizDto> getQuizDetails(@PathVariable String quizId) {
-    QuizDto quizDto = quizService.findQuizDetails(quizId);
-    log.info("Received questions: " + quizDto);
-    return new ResponseEntity<>(quizDto, HttpStatus.OK);
+  public ResponseEntity<QuizDetailsDto> getQuizDetails(@PathVariable String quizId) {
+    QuizDetailsDto quizDetailsDto = quizService.findQuizDetails(quizId);
+    log.info("Received questions: " + quizDetailsDto);
+    return new ResponseEntity<>(quizDetailsDto, HttpStatus.OK);
   }
 }

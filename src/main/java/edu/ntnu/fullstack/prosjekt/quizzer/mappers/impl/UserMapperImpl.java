@@ -1,6 +1,5 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.mappers.impl;
 
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
