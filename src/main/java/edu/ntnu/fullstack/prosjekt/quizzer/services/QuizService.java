@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.CategoryDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
@@ -40,6 +41,8 @@ public interface QuizService {
    * @return The quiz as a dto.
    */
   QuizDetailsDto findQuizDtoById(String quizId);
+
+  List<CategoryDto> findAllCategories();
 
   /**
    * Service for finding a specific quiz given an id.
