@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.MessageDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
@@ -62,11 +63,12 @@ public class QuizController {
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 
+  @CrossOrigin(origins = "*")
   @PutMapping
-  public ResponseEntity<String> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
+  public ResponseEntity<MessageDto> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
     log.info("Questions: " + updatedQuizDto.getQuestions());
     quizService.updateQuizEntity(updatedQuizDto);
-    return new ResponseEntity<>("Updated quiz", HttpStatus.CREATED);
+    return new ResponseEntity<>(new MessageDto("Quiz updated"), HttpStatus.OK);
   }
 
   /**
