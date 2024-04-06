@@ -1,14 +1,22 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.mappers.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionAnswersDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
+import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * A class implementing the Mapper interface, to map between QuestionDTOs and QuestionEntities.
  */
+@Log
 @Component
 public class QuestionMapperImpl implements Mapper<QuestionEntity, QuestionDto> {
 
@@ -17,13 +25,16 @@ public class QuestionMapperImpl implements Mapper<QuestionEntity, QuestionDto> {
    */
   private ModelMapper modelMapper;
 
+  private ObjectMapper objectMapper;
+
   /**
    * Used for Dependency Injection.
    *
    * @param modelMapper The injected ModelMapper Object.
    */
-  public QuestionMapperImpl(ModelMapper modelMapper) {
+  public QuestionMapperImpl(ModelMapper modelMapper, ObjectMapper objectMapper) {
     this.modelMapper = modelMapper;
+    this.objectMapper = objectMapper;
   }
 
   /**
@@ -34,7 +45,17 @@ public class QuestionMapperImpl implements Mapper<QuestionEntity, QuestionDto> {
    */
   @Override
   public QuestionDto mapTo(QuestionEntity questionEntity) {
-    return modelMapper.map(questionEntity, QuestionDto.class);
+    QuestionDto questionDto = modelMapper.map(questionEntity, QuestionDto.class);
+    if (questionEntity.getAlternatives() != null) {
+      try {
+        questionDto.setAlternatives(objectMapper.readValue(questionEntity.getAlternatives(), List.class));
+        log.info("Mapper dto: " + questionDto);
+        return questionDto;
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return questionDto;
   }
 
   /**

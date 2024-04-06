@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * The QuizDto class is a mirror of the QuizEntity class, with the intention of creating
  *  * a separation between user input/output and database objects.
@@ -39,4 +41,6 @@ public class QuizDto {
    * one user. This field is a foreign key linking owner and quizzes.
    */
   private UserDto owner;
+  
+  private List<QuestionDto> questions;
 }

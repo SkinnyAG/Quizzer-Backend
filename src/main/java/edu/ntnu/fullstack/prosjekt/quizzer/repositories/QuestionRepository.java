@@ -1,6 +1,8 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.repositories;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface QuestionRepository extends CrudRepository<QuestionEntity, Long> {
+  List<QuestionEntity> findQuestionEntitiesByQuiz(QuizEntity quizEntity);
 }

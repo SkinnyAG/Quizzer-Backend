@@ -1,5 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import lombok.extern.java.Log;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
 
 /**
  * Rest Controller for managing requests relating to quiz database operations.
@@ -50,6 +53,14 @@ public class QuizController {
     }
   }
 
+  @PatchMapping(path = "/{quizId}")
+  public ResponseEntity<?> addQuestionToQuiz(@PathVariable String quizId, @RequestBody QuestionDto questionDto) throws JsonProcessingException {
+    log.info("Testiiing");
+    log.info("Received: " + questionDto);
+    QuestionDto responseDto = quizService.addQuestionToQuiz(quizId, questionDto);
+    return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+  }
+
   /**
    * Endpoint that gets a page of quizzes.
    *
@@ -72,12 +83,9 @@ public class QuizController {
    */
   @CrossOrigin(origins = "*")
   @GetMapping(path = "/{quizId}")
-  public ResponseEntity<QuizDto> getQuiz(@PathVariable String quizId) {
-    if (quizService.findQuizDtoById(quizId) == null) {
-      return ResponseEntity.notFound().build();
-    }
-    QuizDto respnseQuizDto = quizService.findQuizDtoById(quizId);
-    return new ResponseEntity<>(respnseQuizDto, HttpStatus.OK);
+  public ResponseEntity<QuizDto> getQuizDetails(@PathVariable String quizId) {
+    QuizDto quizDto = quizService.findQuizDetails(quizId);
+    log.info("Received questions: " + quizDto);
+    return new ResponseEntity<>(quizDto, HttpStatus.OK);
   }
-
 }
