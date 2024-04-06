@@ -152,11 +152,14 @@ public class QuizServiceImpl implements QuizService {
     log.info("Quiz title: " + quizDetailsDto.getTitle());
     QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
     questionService.clearQuestionsByQuizEntity(quizEntity);
-    questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
-    quizEntity.setTitle(quizDetailsDto.getTitle());
-    quizEntity.setDescription(quizDetailsDto.getDescription());
-    quizEntity.setImageLink(quizDetailsDto.getImageLink());
-    quizRepository.save(quizEntity);
+//    questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
+//    quizEntity.setTitle(quizDetailsDto.getTitle());
+//    quizEntity.setDescription(quizDetailsDto.getDescription());
+//    quizEntity.setImageLink(quizDetailsDto.getImageLink());
+//    quizRepository.save(quizEntity);
+
+    QuizEntity quizEntity1 = new ModelMapper().map(quizDetailsDto, QuizEntity.class);
+    quizRepository.save(quizEntity1);
   }
 
   @Override
