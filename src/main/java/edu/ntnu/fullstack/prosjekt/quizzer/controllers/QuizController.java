@@ -62,6 +62,13 @@ public class QuizController {
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 
+  @PutMapping
+  public ResponseEntity<String> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
+    log.info("Questions: " + updatedQuizDto.getQuestions());
+    quizService.updateQuizEntity(updatedQuizDto);
+    return new ResponseEntity<>("Updated quiz", HttpStatus.CREATED);
+  }
+
   /**
    * Endpoint that gets a page of quizzes.
    *

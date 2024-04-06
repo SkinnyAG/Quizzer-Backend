@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -142,6 +143,20 @@ public class QuizServiceImpl implements QuizService {
       return quizRepository.findById(idValue).get();
     }
     return null;
+  }
+
+  @Transactional
+  @Override
+  public void updateQuizEntity(QuizDetailsDto quizDetailsDto) {
+    log.info("Quiz id: " + quizDetailsDto.getQuizId());
+    log.info("Quiz title: " + quizDetailsDto.getTitle());
+    QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
+    questionService.clearQuestionsByQuizEntity(quizEntity);
+    questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
+    quizEntity.setTitle(quizDetailsDto.getTitle());
+    quizEntity.setDescription(quizDetailsDto.getDescription());
+    quizEntity.setImageLink(quizDetailsDto.getImageLink());
+    quizRepository.save(quizEntity);
   }
 
   @Override
