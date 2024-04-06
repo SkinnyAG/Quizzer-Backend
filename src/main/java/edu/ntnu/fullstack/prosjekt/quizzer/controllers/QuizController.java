@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.CategoryDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 
 /**
@@ -95,5 +98,12 @@ public class QuizController {
     QuizDetailsDto quizDetailsDto = quizService.findQuizDetails(quizId);
     log.info("Received questions: " + quizDetailsDto);
     return new ResponseEntity<>(quizDetailsDto, HttpStatus.OK);
+  }
+
+  @CrossOrigin(origins = "*")
+  @GetMapping(path = "/categories")
+  public ResponseEntity<List<CategoryDto>> getCategories() {
+    List<CategoryDto> categories = quizService.findAllCategories();
+    return new ResponseEntity<>(categories, HttpStatus.OK);
   }
 }
