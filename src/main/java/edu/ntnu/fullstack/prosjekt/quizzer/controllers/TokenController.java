@@ -88,7 +88,7 @@ public class TokenController {
 
       return ResponseEntity.ok(tokens);
     } catch (JWTVerificationException exception){
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid refresh token");
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
     }
   }
 
