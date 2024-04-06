@@ -153,8 +153,6 @@ public class QuizServiceImpl implements QuizService {
     QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
     questionService.clearQuestionsByQuizEntity(quizEntity);
     questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
-
-
     QuizEntity updatedQuizEntity = new ModelMapper().map(quizDetailsDto, QuizEntity.class);
     quizRepository.save(updatedQuizEntity);
   }
