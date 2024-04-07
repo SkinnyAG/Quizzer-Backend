@@ -18,7 +18,7 @@ public interface QuizService {
    *
    * @param quizDetailsDto QuizDetailsDto that should be added.
    */
-  void createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
+  QuizDetailsDto createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
 
   QuestionDto addQuestionToQuiz(String quizId, QuestionDto questionDto) throws JsonProcessingException;
 

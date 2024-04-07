@@ -80,7 +80,7 @@ public class QuizServiceImpl implements QuizService {
    * @return The created QuizEntity
    */
   @Override
-  public void createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity) {
+  public QuizDetailsDto createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity) {
     log.info("Creating quiz");
 
     if (quizDetailsDto.getTitle() == null || quizDetailsDto.getTitle().isEmpty()) {
@@ -107,6 +107,7 @@ public class QuizServiceImpl implements QuizService {
 
     QuizDetailsDto savedQuizDto = quizMapper.mapTo(savedQuizEntity);
     log.info("Saved quiz dto: " + savedQuizDto);
+    return savedQuizDto;
   }
 
   @Override
