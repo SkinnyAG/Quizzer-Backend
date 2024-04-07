@@ -22,7 +22,7 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeHttpRequests()
-            .requestMatchers("/token", "/api/**", "/api/token/refresh", "v3/api-docs").permitAll()
+            .requestMatchers("/token", "/api/**", "/api/token/refresh", "v3/api-docs", "/swagger-ui/**").permitAll()
             .anyRequest().authenticated().and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
