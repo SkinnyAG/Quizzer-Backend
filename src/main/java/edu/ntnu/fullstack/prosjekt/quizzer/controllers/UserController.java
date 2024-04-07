@@ -103,11 +103,11 @@ public class UserController {
    * @return A response entity with either a not authorized message, or ok-message.
    */
 
-  @PatchMapping("/{username}/update")
-  public ResponseEntity<String> updateUser(@PathVariable("username") String username, @RequestBody UserDto userDto) {
+  @PatchMapping("/{username}")
+  public ResponseEntity<MessageDto> updateUser(@PathVariable("username") String username, @RequestBody UserDto userDto) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     if (!username.equals(authenticatedUsername)) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not authorized to update this information");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageDto("You are not authorized to update this information"));
     }
     try {
       boolean updated = false;
@@ -125,12 +125,12 @@ public class UserController {
       }
 
       if (!updated) {
-        return ResponseEntity.badRequest().body("No valid field provided for update");
+        return ResponseEntity.badRequest().body(new MessageDto("No valid field provided for update"));
       }
-      return ResponseEntity.ok("User information updated successfully");
+      return ResponseEntity.ok(new MessageDto("User information updated successfully"));
 
     } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the information: " + e.getMessage());
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "An error occurred while updating the information: " + e.getMessage());
     }
   }
 }
