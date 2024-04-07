@@ -22,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
  * Base endpoint is /api/users/
  */
 @Log
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
 @RestController
 public class UserController {

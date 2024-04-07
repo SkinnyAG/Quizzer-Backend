@@ -7,10 +7,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.TokenDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping(value = "api/token")
 @EnableAutoConfiguration
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class TokenController {
 
   // keyStr is hardcoded here for testing purpose
@@ -71,22 +73,19 @@ public class TokenController {
    * @return the new token.
    */
   @PostMapping("/refresh")
-  public ResponseEntity<Map<String, String>> refreshAccessToken(@RequestBody String refreshToken) {
+  public ResponseEntity<TokenDto> refreshAccessToken(@RequestBody TokenDto refreshToken) {
     try {
       Algorithm algorithm = Algorithm.HMAC512(keyStr);
       JWTVerifier verifier = JWT.require(algorithm)
           .withIssuer("QuizzerBackend")
           .build();
-      DecodedJWT jwt = verifier.verify(refreshToken);
+      DecodedJWT jwt = verifier.verify(refreshToken.getToken());
       String userId = jwt.getSubject();
 
       // Generate new tokens
       String newAccessToken = generateAccessToken(userId);
 
-      Map<String, String> tokens = new HashMap<>();
-      tokens.put("accessToken", newAccessToken);
-
-      return ResponseEntity.ok(tokens);
+      return ResponseEntity.ok(new TokenDto(newAccessToken));
     } catch (JWTVerificationException exception){
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
     }

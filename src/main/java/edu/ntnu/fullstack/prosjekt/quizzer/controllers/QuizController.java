@@ -24,6 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/quizzes")
+@CrossOrigin(origins = "*")
 @Log
 public class QuizController {
   /**
@@ -66,7 +67,6 @@ public class QuizController {
     return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
   }
 
-  @CrossOrigin(origins = "*")
   @PutMapping
   public ResponseEntity<MessageDto> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
     log.info("Questions: " + updatedQuizDto.getQuestions());
@@ -80,7 +80,6 @@ public class QuizController {
    * @param pageable Pagination parameters such as page size, number and sorting.
    * @return Response with a status code and message.
    */
-  @CrossOrigin(origins = "*")
   @GetMapping()
   public ResponseEntity<Page<QuizGeneralDto>> getPageOfQuizzes(Pageable pageable) {
     log.info("Client requesting quiz page");
@@ -88,7 +87,6 @@ public class QuizController {
     return new ResponseEntity<>(quizDtoPage, HttpStatus.OK);
   }
 
-  @CrossOrigin(origins = "*")
   @GetMapping(path = "/filter")
   public ResponseEntity<Page<QuizGeneralDto>> getFilteredPageOfQuizzes(@RequestParam String searchQuery, Pageable pageable) {
     Page<QuizGeneralDto> quizzesByCategories = quizService.filterQuizzes(searchQuery, pageable);
@@ -101,7 +99,6 @@ public class QuizController {
    * @param quizId ID of the quiz
    * @return A quizDto object representing the quiz.
    */
-  @CrossOrigin(origins = "*")
   @GetMapping(path = "/{quizId}")
   public ResponseEntity<QuizDetailsDto> getQuizDetails(@PathVariable String quizId) {
     QuizDetailsDto quizDetailsDto = quizService.findQuizDetails(quizId);
@@ -109,7 +106,6 @@ public class QuizController {
     return new ResponseEntity<>(quizDetailsDto, HttpStatus.OK);
   }
 
-  @CrossOrigin(origins = "*")
   @GetMapping(path = "/categories")
   public ResponseEntity<List<CategoryDto>> getCategories() {
     List<CategoryDto> categories = quizService.findAllCategories();
