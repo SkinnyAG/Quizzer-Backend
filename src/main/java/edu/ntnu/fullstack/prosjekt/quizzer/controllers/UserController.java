@@ -5,17 +5,12 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.MessageDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
@@ -30,7 +25,7 @@ public class UserController {
   /**
    * Used for Dependency Injection.
    */
-  private UserService userService;
+  private final UserService userService;
 
   /**
    * Used for Dependency Injection.
@@ -39,6 +34,15 @@ public class UserController {
    */
   public UserController(UserService userService) {
     this.userService = userService;
+  }
+
+  @GetMapping
+  public ResponseEntity<Page<UserDto>> searchUsers(@RequestParam String searchQuery, Pageable pageable) {
+    try {
+      return ResponseEntity.ok(userService.searchUsers(searchQuery, pageable));
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
+    }
   }
 
   /**

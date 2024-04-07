@@ -1,17 +1,14 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.MessageDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.CategoryDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.*;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -59,17 +56,22 @@ public class QuizController {
     }
   }
 
-  @PatchMapping(path = "/{quizId}")
-  public ResponseEntity<?> addQuestionToQuiz(@PathVariable String quizId, @RequestBody QuestionDto questionDto) throws JsonProcessingException {
-    log.info("Testiiing");
-    log.info("Received: " + questionDto);
-    QuestionDto responseDto = quizService.addQuestionToQuiz(quizId, questionDto);
-    return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
-  }
-
   @PutMapping
   public ResponseEntity<MessageDto> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
     log.info("Questions: " + updatedQuizDto.getQuestions());
+
+    // Check the username
+    String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+    QuizDetailsDto actualEntry = quizService.findQuizDtoById(updatedQuizDto.getQuizId().toString());
+
+    // The user must either be the owner, or a collaborator
+    if (!updatedQuizDto.getOwner().getUsername().equals(username)
+            && actualEntry.getCollaborators().stream()
+            .noneMatch(userDto -> userDto.getUsername().equals(username))) {
+      return new ResponseEntity<>(new MessageDto("You are not authorized to update this quiz"), HttpStatus.UNAUTHORIZED);
+    }
+
     quizService.updateQuizEntity(updatedQuizDto);
     return new ResponseEntity<>(new MessageDto("Quiz updated"), HttpStatus.OK);
   }
