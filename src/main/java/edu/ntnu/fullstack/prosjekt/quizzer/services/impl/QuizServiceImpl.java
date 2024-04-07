@@ -9,6 +9,7 @@ import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.CategoryEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
+import edu.ntnu.fullstack.prosjekt.quizzer.repositories.CategoryRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.QuizRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
@@ -51,16 +52,19 @@ public class QuizServiceImpl implements QuizService {
 
   private QuestionService questionService;
 
+  private CategoryRepository categoryRepository;
+
 
   /**
    * Used for Dependency Injection.
    *
    * @param quizRepository The Injected QuizRepository object.
    */
-  public QuizServiceImpl(QuizRepository quizRepository, UserService userService,
+  public QuizServiceImpl(QuizRepository quizRepository, CategoryRepository categoryRepository, UserService userService,
                          QuestionService questionService, Mapper<QuizEntity, QuizDetailsDto> quizMapper,
                          Mapper<CategoryEntity, CategoryDto> categoryMapper) {
     this.quizRepository = quizRepository;
+    this.categoryRepository = categoryRepository;
     this.quizMapper = quizMapper;
     this.userService = userService;
     this.questionService = questionService;
@@ -174,6 +178,7 @@ public class QuizServiceImpl implements QuizService {
     return quizDetailsDto;
   }
 
+  @Override
   public Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable) {
     Page<QuizEntity> quizEntityPage = quizRepository.findByCategoriesInOrTitleContaining(searchQuery, pageable);
     return quizEntityPage.map(obj -> {
@@ -181,5 +186,10 @@ public class QuizServiceImpl implements QuizService {
       converted.setAmountOfQuestions(questionService.getAmountOfQuestionsByQuiz(obj));
       return converted;
     });
+  }
+
+  public List<CategoryDto> findAllCategories() {
+    List<CategoryDto> categories = categoryRepository.findAll().stream().map(categoryEntity -> categoryMapper.mapTo(categoryEntity)).toList();
+    return categories;
   }
 }

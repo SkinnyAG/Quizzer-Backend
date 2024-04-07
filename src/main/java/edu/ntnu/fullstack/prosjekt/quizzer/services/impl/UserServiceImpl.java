@@ -7,6 +7,7 @@ import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.UserRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,10 +59,16 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public Boolean checkCredentials(LoginDto userToBeChecked) {
-    //TODO: fikse litt exception handling
-    UserEntity userEntity = findEntityByUsername(userToBeChecked.getUsername());
-    return passwordEncoder.matches(userToBeChecked.getPassword(),
-            userEntity.getPassword());
+    try {
+      UserEntity userEntity = findEntityByUsername(userToBeChecked.getUsername());
+
+      if (userEntity == null) {
+        throw new UsernameNotFoundException("User not found with username: " + userToBeChecked.getUsername());
+      }
+      return passwordEncoder.matches(userToBeChecked.getPassword(), userEntity.getPassword());
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   /**
