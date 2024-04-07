@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.dto;
 
+import edu.ntnu.fullstack.prosjekt.quizzer.enums.QuestionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,4 +50,10 @@ public class QuestionDto {
    * one quiz relationship.
    */
   private String quizId;
+
+    /**
+     * The type field informs frontend how to display the question, whether it
+     * is a multiple choice, true/false or short answer question.
+     */
+  private QuestionType type;
 }

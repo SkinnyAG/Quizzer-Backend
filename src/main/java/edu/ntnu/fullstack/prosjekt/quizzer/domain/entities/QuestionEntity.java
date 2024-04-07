@@ -1,5 +1,6 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.entities;
 
+import edu.ntnu.fullstack.prosjekt.quizzer.enums.QuestionType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,6 +35,7 @@ public class QuestionEntity {
    * The label field represents the question that is being asked, such as "How many people live
    * in Norway?."
    */
+  @NotNull
   private String label;
 
   /**
@@ -44,6 +47,7 @@ public class QuestionEntity {
    * The position field should tell the question which position it will have in an ordered quiz,
    * which will be randomized if wanted.
    */
+  @NotNull
   private Short position;
 
   /**
@@ -51,6 +55,13 @@ public class QuestionEntity {
    * a user can answer.
    */
   private String alternatives;
+
+  /**
+   * The type field informs frontend how to display the question, whether it
+   * is a multiple choice, true/false or short answer question.
+   */
+  @NotNull
+  private QuestionType type;
 
 
   /**
