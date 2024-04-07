@@ -36,7 +36,7 @@ class TokenControllerIntegrationTest {
   TokenController controller = new TokenController(null);
 
   @Test
-  void authenticateUser_ValidCredentials_ReturnsTokens() throws Exception {
+  void authenticateUserValidCredentialsReturnsTokens() throws Exception {
     LoginDto loginDto = new LoginDto("user", "password");
     given(userService.checkCredentials(any(LoginDto.class))).willReturn(true);
 
@@ -49,7 +49,7 @@ class TokenControllerIntegrationTest {
   }
 
   @Test
-  void authenticateUser_InvalidCredentials_ReturnsUnauthorized() throws Exception {
+  void authenticateUserInvalidCredentialsReturnsUnauthorized() throws Exception {
     LoginDto loginDto = new LoginDto("user", "wrongpassword");
     given(userService.checkCredentials(any(LoginDto.class))).willReturn(false);
 
@@ -60,7 +60,7 @@ class TokenControllerIntegrationTest {
   }
 
   @Test
-  void refreshAccessToken_WithValidRefreshToken_ReturnsNewAccessToken() throws Exception {
+  void refreshAccessTokenWithValidRefreshTokenReturnsNewAccessToken() throws Exception {
     String userId = "testUser";
     String validRefreshToken = controller.generateRefreshToken(userId);
     TokenDto refreshTokenDto = new TokenDto(validRefreshToken);
@@ -73,7 +73,7 @@ class TokenControllerIntegrationTest {
   }
 
   @Test
-  void refreshAccessToken_WithInvalidRefreshToken_ReturnsUnauthorized() throws Exception {
+  void refreshAccessTokenWithInvalidRefreshTokenReturnsUnauthorized() throws Exception {
     // Arrange
     String invalidRefreshToken = "invalidToken";
     TokenDto refreshTokenDto = new TokenDto(invalidRefreshToken);

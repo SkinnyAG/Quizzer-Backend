@@ -47,7 +47,7 @@ class UserControllerIntegrationTest {
   }
 
   @Test
-  void createUser_WithValidData_ReturnsCreatedUser() throws Exception {
+  void createUserWithValidDataReturnsCreatedUser() throws Exception {
     UserDto newUser = new UserDto("newUser", "New User", "newuser@example.com", "password");
     given(userService.createUser(any(UserDto.class))).willReturn(newUser);
 
@@ -59,7 +59,7 @@ class UserControllerIntegrationTest {
   }
 
   @Test
-  void loginUser_WithValidCredentials_ReturnsAuthenticatedMessage() throws Exception {
+  void loginUserWithValidCredentialsReturnsAuthenticatedMessage() throws Exception {
     LoginDto loginDto = new LoginDto("user", "password");
     given(userService.checkCredentials(any(LoginDto.class))).willReturn(true);
 
@@ -71,7 +71,7 @@ class UserControllerIntegrationTest {
   }
 
   @Test
-  void loginUser_WithInvalidCredentials_ReturnsUnauthorized() throws Exception {
+  void loginUserWithInvalidCredentialsReturnsUnauthorized() throws Exception {
     LoginDto invalidLogin = new LoginDto("user", "wrongPassword");
     given(userService.checkCredentials(any(LoginDto.class))).willReturn(false);
 
@@ -84,7 +84,7 @@ class UserControllerIntegrationTest {
 
 
   @Test
-  void getUser_WithValidUsername_ReturnsUserInfo() throws Exception {
+  void getUserWithValidUsernameReturnsUserInfo() throws Exception {
     String username = "existingUser";
     mockSecurityContext(username);
 
@@ -97,13 +97,13 @@ class UserControllerIntegrationTest {
   }
 
   @Test
-  void getUser_WhenUnauthenticated_ReturnsUnauthorized() throws Exception {
+  void getUserWhenUnauthenticatedReturnsUnauthorized() throws Exception {
     mockMvc.perform(get("/api/users/{username}", "existingUser"))
         .andExpect(status().isUnauthorized());
   }
 
   @Test
-  void updateUser_WithValidData_ReturnsSuccessMessage() throws Exception {
+  void updateUserWithValidDataReturnsSuccessMessage() throws Exception {
     String username = "existingUser";
     mockSecurityContext(username);
 
@@ -117,7 +117,7 @@ class UserControllerIntegrationTest {
   }
 
   @Test
-  void updateUser_WhenUnauthenticated_ReturnsUnauthorized() throws Exception {
+  void updateUserWhenUnauthenticatedReturnsUnauthorized() throws Exception {
     UserDto userUpdateInfo = new UserDto("existingUser", "New Name", "newemail@example.com", "newPassword");
 
     mockMvc.perform(patch("/api/users/{username}", "existingUser")

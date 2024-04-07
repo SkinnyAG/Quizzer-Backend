@@ -9,7 +9,7 @@ class TokenControllerTest {
   TokenController controller = new TokenController(null);
 
   @Test
-  void generateAccessToken_ValidUserId_GeneratesValidToken() {
+  void generateAccessTokenValidUserIdGeneratesValidToken() {
 
     String userId = "user123";
 
@@ -19,7 +19,7 @@ class TokenControllerTest {
   }
 
   @Test
-  void generateRefreshToken_ValidUserId_GeneratesValidToken() {
+  void generateRefreshTokenValidUserIdGeneratesValidToken() {
     String userId = "user123";
 
     String refreshToken = controller.generateRefreshToken(userId);
