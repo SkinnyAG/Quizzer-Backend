@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.MessageDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
@@ -66,12 +67,12 @@ public class UserController {
    */
 
   @PostMapping(path = "/login")
-  public ResponseEntity<String> loginUser(@RequestBody LoginDto loginUser) {
+  public ResponseEntity<MessageDto> loginUser(@RequestBody LoginDto loginUser) {
     try {
       if (userService.checkCredentials(loginUser)) {
-        return ResponseEntity.ok("User authenticated successfully");
+        return ResponseEntity.ok(new MessageDto("User authenticated successfully"));
       } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageDto("Invalid credentials"));
       }
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
@@ -101,6 +102,7 @@ public class UserController {
    * @param userDto  DTO containing the new information (email, full name, password).
    * @return A response entity with either a not authorized message, or ok-message.
    */
+
   @PatchMapping("/{username}/update")
   public ResponseEntity<String> updateUser(@PathVariable("username") String username, @RequestBody UserDto userDto) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -125,8 +127,8 @@ public class UserController {
       if (!updated) {
         return ResponseEntity.badRequest().body("No valid field provided for update");
       }
-
       return ResponseEntity.ok("User information updated successfully");
+
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the information: " + e.getMessage());
     }
