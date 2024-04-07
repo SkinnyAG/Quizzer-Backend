@@ -7,6 +7,9 @@ import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.UserRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -122,6 +125,13 @@ public class UserServiceImpl implements UserService {
       return userRepository.findById(username).get();
     }
     return null;
+  }
+
+  @Override
+  public Page<UserDto> searchUsers(String searchQuery, Pageable pageable) {
+    Page<UserEntity> users = userRepository.findAllByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCase(searchQuery, searchQuery, pageable);
+    ModelMapper mapper = new ModelMapper();
+    return users.map(obj -> mapper.map(obj, UserDto.class));
   }
 
   /**

@@ -181,8 +181,9 @@ public class QuizServiceImpl implements QuizService {
   @Override
   public Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable) {
     Page<QuizEntity> quizEntityPage = quizRepository.findByCategoriesInOrTitleContaining(searchQuery, pageable);
+    ModelMapper mapper = new ModelMapper();
     return quizEntityPage.map(obj -> {
-      QuizGeneralDto converted = new ModelMapper().map(obj, QuizGeneralDto.class);
+      QuizGeneralDto converted = mapper.map(obj, QuizGeneralDto.class);
       converted.setAmountOfQuestions(questionService.getAmountOfQuestionsByQuiz(obj));
       return converted;
     });

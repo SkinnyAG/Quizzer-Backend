@@ -3,6 +3,10 @@ package edu.ntnu.fullstack.prosjekt.quizzer.services;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * Interface providing services between the user database table and user requests.
@@ -35,6 +39,8 @@ public interface UserService {
   UserEntity findEntityByUsername(String username);
 
   Boolean checkCredentials(LoginDto userToBeChecked);
+
+  Page<UserDto> searchUsers(String searchQuery, Pageable pageable);
 
   /**
    * Service for updating a users email.
