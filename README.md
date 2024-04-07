@@ -16,7 +16,7 @@ mvn spring-boot:run
 ```
 
 
-### Run JUnit tests
+## Run JUnit tests
 To only run the JUnit tests:
 ```sh
 mvn test
