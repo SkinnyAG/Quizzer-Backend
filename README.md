@@ -5,11 +5,11 @@ This file should help you get started this back-end server!
 ## Run server
 
 ```sh
- maven command goes here
+mvn spring-boot:run
 ```
 
 ### Run JUnit tests
 
 ```sh
- maven test command here
+mvn test
 ```
