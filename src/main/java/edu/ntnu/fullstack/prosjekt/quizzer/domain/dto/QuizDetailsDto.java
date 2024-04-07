@@ -43,6 +43,8 @@ public class QuizDetailsDto {
   private UserDto owner;
 
   private List<CategoryDto> categories = new ArrayList<>();
+
+  private List<UserDto> collaborators = new ArrayList<>();
   
   private List<QuestionDto> questions = new ArrayList<>();
 }

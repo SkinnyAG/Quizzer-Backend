@@ -50,6 +50,12 @@ public class QuizEntity {
   private String imageLink = "";
 
   /**
+   * The questions field should store a list of questions that are part of the quiz.
+   */
+  @ManyToMany
+  private List<UserEntity> collaborators;
+
+  /**
    * The owner field should represent the user who owns the quiz, with many quizzes belonging to
    * one user. This field is a foreign key linking owner and quizzes.
    */

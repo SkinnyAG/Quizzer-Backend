@@ -135,6 +135,13 @@ public class UserServiceImpl implements UserService {
     return null;
   }
 
+  @Override
+  public Page<UserDto> searchUsers(String searchQuery, Pageable pageable) {
+    Page<UserEntity> users = userRepository.findAllByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCase(searchQuery, searchQuery, pageable);
+    ModelMapper mapper = new ModelMapper();
+    return users.map(obj -> mapper.map(obj, UserDto.class));
+  }
+
   /**
       * Updates the email address of a user.
       *

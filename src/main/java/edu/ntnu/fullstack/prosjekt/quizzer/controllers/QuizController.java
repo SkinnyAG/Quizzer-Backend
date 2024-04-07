@@ -23,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/quizzes")
+@CrossOrigin(origins = "*")
 @Log
 public class QuizController {
   /**
@@ -63,18 +64,22 @@ public class QuizController {
     }
   }
 
-  @PatchMapping(path = "/{quizId}")
-  public ResponseEntity<?> addQuestionToQuiz(@PathVariable String quizId, @RequestBody QuestionDto questionDto) throws JsonProcessingException {
-    log.info("Testiiing");
-    log.info("Received: " + questionDto);
-    QuestionDto responseDto = quizService.addQuestionToQuiz(quizId, questionDto);
-    return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
-  }
-
-  @CrossOrigin(origins = "*")
   @PutMapping
   public ResponseEntity<MessageDto> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
     log.info("Questions: " + updatedQuizDto.getQuestions());
+
+    // Check the username
+    String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+    QuizDetailsDto actualEntry = quizService.findQuizDtoById(updatedQuizDto.getQuizId().toString());
+
+    // The user must either be the owner, or a collaborator
+    if (!updatedQuizDto.getOwner().getUsername().equals(username)
+            && actualEntry.getCollaborators().stream()
+            .noneMatch(userDto -> userDto.getUsername().equals(username))) {
+      return new ResponseEntity<>(new MessageDto("You are not authorized to update this quiz"), HttpStatus.UNAUTHORIZED);
+    }
+
     quizService.updateQuizEntity(updatedQuizDto);
     return new ResponseEntity<>(new MessageDto("Quiz updated"), HttpStatus.OK);
   }
@@ -85,7 +90,6 @@ public class QuizController {
    * @param pageable Pagination parameters such as page size, number and sorting.
    * @return Response with a status code and message.
    */
-  @CrossOrigin(origins = "*")
   @GetMapping()
   public ResponseEntity<Page<QuizGeneralDto>> getPageOfQuizzes(Pageable pageable) {
     log.info("Client requesting quiz page");
@@ -93,7 +97,6 @@ public class QuizController {
     return new ResponseEntity<>(quizDtoPage, HttpStatus.OK);
   }
 
-  @CrossOrigin(origins = "*")
   @GetMapping(path = "/filter")
   public ResponseEntity<Page<QuizGeneralDto>> getFilteredPageOfQuizzes(@RequestParam String searchQuery, Pageable pageable) {
     Page<QuizGeneralDto> quizzesByCategories = quizService.filterQuizzes(searchQuery, pageable);
@@ -106,7 +109,6 @@ public class QuizController {
    * @param quizId ID of the quiz
    * @return A quizDto object representing the quiz.
    */
-  @CrossOrigin(origins = "*")
   @GetMapping(path = "/{quizId}")
   public ResponseEntity<QuizDetailsDto> getQuizDetails(@PathVariable String quizId) {
     QuizDetailsDto quizDetailsDto = quizService.findQuizDetails(quizId);
@@ -114,7 +116,6 @@ public class QuizController {
     return new ResponseEntity<>(quizDetailsDto, HttpStatus.OK);
   }
 
-  @CrossOrigin(origins = "*")
   @GetMapping(path = "/categories")
   public ResponseEntity<List<CategoryDto>> getCategories() {
     List<CategoryDto> categories = quizService.findAllCategories();

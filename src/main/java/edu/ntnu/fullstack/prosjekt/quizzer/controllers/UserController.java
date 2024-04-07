@@ -11,13 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
@@ -25,14 +19,14 @@ import org.springframework.web.server.ResponseStatusException;
  * Base endpoint is /api/users/
  */
 @Log
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
   /**
    * Used for Dependency Injection.
    */
-  private UserService userService;
+  private final UserService userService;
 
   /**
    * Used for Dependency Injection.
@@ -41,6 +35,15 @@ public class UserController {
    */
   public UserController(UserService userService) {
     this.userService = userService;
+  }
+
+  @GetMapping
+  public ResponseEntity<Page<UserDto>> searchUsers(@RequestParam String searchQuery, Pageable pageable) {
+    try {
+      return ResponseEntity.ok(userService.searchUsers(searchQuery, pageable));
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
+    }
   }
 
   /**
@@ -98,65 +101,41 @@ public class UserController {
   }
 
   /**
-   * Endpoint for updating a users email.
+   * Endpoint for updating a user's information such as email, full name, and password.
    *
-   * @param username the chosen user for mail update.
-   * @param userDto DTO containing the new mail.
+   * @param username the chosen user for update.
+   * @param userDto  DTO containing the new information (email, full name, password).
    * @return A response entity with either a not authorized message, or ok-message.
    */
-  @PostMapping("/{username}/update-email")
-  public ResponseEntity<MessageDto> updateUserEmail(@PathVariable("username") String username, @RequestBody UserDto userDto) {
-    String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-    if (!username.equals(authenticatedUsername)) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
-    }
-    try {
-      userService.updateUserEmail(username, userDto.getEmail());
-      return ResponseEntity.ok(new MessageDto("User email updated successfully"));
-    } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the email", e);
-    }
-  }
 
-  /**
-   * Endpoint for updating a users full name.
-   *
-   * @param username the chosen user for the full name update.
-   * @param userDto DTO containing the new full name.
-   * @return A response entity with either a not authorized message, or ok-message.
-   */
-  @PostMapping("/{username}/update-fullname")
-  public ResponseEntity<MessageDto> updateUserFullName(@PathVariable("username") String username, @RequestBody UserDto userDto) {
+  @PatchMapping("/{username}")
+  public ResponseEntity<MessageDto> updateUser(@PathVariable("username") String username, @RequestBody UserDto userDto) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     if (!username.equals(authenticatedUsername)) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageDto("You are not authorized to update this information"));
     }
     try {
-      userService.updateUserFullName(username, userDto.getFullName());
-      return ResponseEntity.ok(new MessageDto("User full name updated successfully"));
-    } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the full name", e);
-    }
-  }
+      boolean updated = false;
+      if (userDto.getEmail() != null && !userDto.getEmail().isEmpty()) {
+        userService.updateUserEmail(username, userDto.getEmail());
+        updated = true;
+      }
+      if (userDto.getFullName() != null && !userDto.getFullName().isEmpty()) {
+        userService.updateUserFullName(username, userDto.getFullName());
+        updated = true;
+      }
+      if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+        userService.updateUserPassword(username, userDto.getPassword());
+        updated = true;
+      }
 
-  /**
-   * Endpoint for updating a users' password.
-   *
-   * @param username the chosen user for the password update.
-   * @param userDto DTO containing the new password.
-   * @return A response entity with either a not authorized message, or ok-message.
-   */
-  @PostMapping("/{username}/update-password")
-  public ResponseEntity<MessageDto> updateUserPassword(@PathVariable("username") String username, @RequestBody UserDto userDto) {
-    String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-    if (!username.equals(authenticatedUsername)) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
-    }
-    try {
-      userService.updateUserPassword(username, userDto.getPassword());
-      return ResponseEntity.ok(new MessageDto("User password updated successfully"));
+      if (!updated) {
+        return ResponseEntity.badRequest().body(new MessageDto("No valid field provided for update"));
+      }
+      return ResponseEntity.ok(new MessageDto("User information updated successfully"));
+
     } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the password", e);
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "An error occurred while updating the information: " + e.getMessage());
     }
   }
 
