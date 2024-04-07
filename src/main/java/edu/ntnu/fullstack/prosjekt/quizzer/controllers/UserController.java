@@ -2,9 +2,12 @@ package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.MessageDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.SavedQuizAttemptDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -155,6 +158,12 @@ public class UserController {
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the password", e);
     }
+  }
+
+  @GetMapping("/quiz-attempts")
+  public ResponseEntity<Page<SavedQuizAttemptDto>> getQuizAttempts(Pageable pageable) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    return new ResponseEntity<>(userService.findAttemptsByUser(username, pageable), HttpStatus.OK);
   }
 }
 

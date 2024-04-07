@@ -9,12 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionAnswersDto {
-  private Long answerId;
 
   private String answer;
 
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Boolean isCorrect;
-
-  private Short index;
 }
