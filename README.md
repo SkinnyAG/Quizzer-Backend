@@ -3,7 +3,7 @@
 Welcome to the quizzer back-end! This file should help you get started with this project.
 
 ## Preperation
-We recommend doing a mvn clean install to prepare the project for development and testing on your local machine. This ensures a clean, consistent stat with all dependencies resolved and the project correctly built!
+We recommend doing a mvn clean install to prepare the project for development and testing on your local machine. This ensures a clean and consistent state with all dependencies resolved and the project correctly built!
 ```sh
 mvn clean install
 ```
