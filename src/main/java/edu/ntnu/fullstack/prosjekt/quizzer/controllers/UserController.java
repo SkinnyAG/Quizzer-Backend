@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.MessageDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
@@ -65,12 +66,12 @@ public class UserController {
    */
 
   @PostMapping(path = "/login")
-  public ResponseEntity<String> loginUser(@RequestBody LoginDto loginUser) {
+  public ResponseEntity<MessageDto> loginUser(@RequestBody LoginDto loginUser) {
     try {
       if (userService.checkCredentials(loginUser)) {
-        return ResponseEntity.ok("User authenticated successfully");
+        return ResponseEntity.ok(new MessageDto("User authenticated successfully"));
       } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageDto("Invalid credentials"));
       }
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
@@ -101,14 +102,14 @@ public class UserController {
    * @return A response entity with either a not authorized message, or ok-message.
    */
   @PostMapping("/{username}/update-email")
-  public ResponseEntity<String> updateUserEmail(@PathVariable("username") String username, @RequestBody UserDto userDto) {
+  public ResponseEntity<MessageDto> updateUserEmail(@PathVariable("username") String username, @RequestBody UserDto userDto) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     if (!username.equals(authenticatedUsername)) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
     }
     try {
       userService.updateUserEmail(username, userDto.getEmail());
-      return ResponseEntity.ok("User email updated successfully");
+      return ResponseEntity.ok(new MessageDto("User email updated successfully"));
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the email", e);
     }
@@ -122,14 +123,14 @@ public class UserController {
    * @return A response entity with either a not authorized message, or ok-message.
    */
   @PostMapping("/{username}/update-fullname")
-  public ResponseEntity<String> updateUserFullName(@PathVariable("username") String username, @RequestBody UserDto userDto) {
+  public ResponseEntity<MessageDto> updateUserFullName(@PathVariable("username") String username, @RequestBody UserDto userDto) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     if (!username.equals(authenticatedUsername)) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
     }
     try {
       userService.updateUserFullName(username, userDto.getFullName());
-      return ResponseEntity.ok("User full name updated successfully");
+      return ResponseEntity.ok(new MessageDto("User full name updated successfully"));
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the full name", e);
     }
@@ -143,14 +144,14 @@ public class UserController {
    * @return A response entity with either a not authorized message, or ok-message.
    */
   @PostMapping("/{username}/update-password")
-  public ResponseEntity<String> updateUserPassword(@PathVariable("username") String username, @RequestBody UserDto userDto) {
+  public ResponseEntity<MessageDto> updateUserPassword(@PathVariable("username") String username, @RequestBody UserDto userDto) {
     String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     if (!username.equals(authenticatedUsername)) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this information");
     }
     try {
       userService.updateUserPassword(username, userDto.getPassword());
-      return ResponseEntity.ok("User password updated successfully");
+      return ResponseEntity.ok(new MessageDto("User password updated successfully"));
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the password", e);
     }
