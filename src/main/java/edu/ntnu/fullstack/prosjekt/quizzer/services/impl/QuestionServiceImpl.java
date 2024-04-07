@@ -84,6 +84,11 @@ public class QuestionServiceImpl implements QuestionService {
     return questionDtos;
   }
 
+  public List<QuestionEntity> getQuestionEntitiesByQuiz(QuizEntity quizEntity) {
+    List<QuestionEntity> questions = questionRepository.findQuestionEntitiesByQuiz(quizEntity);
+    return questions;
+  }
+
   @Override
   public int getAmountOfQuestionsByQuiz(QuizEntity quizEntity) {
     return questionRepository.findQuestionEntitiesByQuiz(quizEntity).size();
@@ -99,7 +104,11 @@ public class QuestionServiceImpl implements QuestionService {
 
   @Override
   public void addListOfQuestions(List<QuestionDto> questionDtos, QuizEntity quizEntity) {
+    log.info("Starting to add questions");
     for (QuestionDto questionDto : questionDtos) {
+      log.info("Adding");
+      log.info("QuizEntity: " + quizEntity);
+      log.info("Quesitondto: " + questionDto);
       createQuestion(quizEntity, questionDto);
     }
   }

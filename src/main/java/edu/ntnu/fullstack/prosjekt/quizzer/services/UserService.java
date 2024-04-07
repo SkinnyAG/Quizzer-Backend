@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.SavedQuizAttemptDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import org.springframework.data.domain.Page;
@@ -65,4 +66,6 @@ public interface UserService {
    * @param newPassword The new full name for the chosen user.
    */
   void updateUserPassword(String username, String newPassword);
+
+  Page<SavedQuizAttemptDto> findAttemptsByUser(String username, Pageable pageable);
 }

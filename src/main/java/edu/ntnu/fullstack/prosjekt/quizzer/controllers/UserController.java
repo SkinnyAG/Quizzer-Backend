@@ -2,6 +2,7 @@ package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.MessageDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.SavedQuizAttemptDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
@@ -136,6 +137,12 @@ public class UserController {
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "An error occurred while updating the information: " + e.getMessage());
     }
+  }
+
+  @GetMapping("/quiz-attempts")
+  public ResponseEntity<Page<SavedQuizAttemptDto>> getQuizAttempts(Pageable pageable) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    return new ResponseEntity<>(userService.findAttemptsByUser(username, pageable), HttpStatus.OK);
   }
 }
 

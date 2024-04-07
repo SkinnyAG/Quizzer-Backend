@@ -38,7 +38,7 @@ public class TokenController {
   // keyStr is hardcoded here for testing purpose
   // in a real scenario, it should either be stored in a database or injected from the environment
   public static final String keyStr = "changemeinprod";
-  private static final Duration JWT_ACCESS_TOKEN_VALIDITY = Duration.ofMinutes(10);
+  private static final Duration JWT_ACCESS_TOKEN_VALIDITY = Duration.ofMinutes(100);
   private static final Duration JWT_REFRESH_TOKEN_VALIDITY = Duration.ofDays(30);
 
   private UserService userService;

@@ -1,11 +1,9 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.CategoryDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.*;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,9 +17,8 @@ public interface QuizService {
    * Service for creating a quiz in the database.
    *
    * @param quizDetailsDto QuizDetailsDto that should be added.
-   * @return The created QuizDetailsDto.
    */
-  QuizDetailsDto createQuiz(QuizDetailsDto quizDetailsDto);
+  void createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
 
   QuestionDto addQuestionToQuiz(String quizId, QuestionDto questionDto) throws JsonProcessingException;
 
@@ -55,4 +52,6 @@ public interface QuizService {
   void updateQuizEntity(QuizDetailsDto quizDetailsDto);
 
   QuizDetailsDto findQuizDetails(String quizId);
+
+  QuizAttemptDto checkAnswers(String quizId, QuizAttemptDto quizAttemptDto, UserEntity userEntity);
 }

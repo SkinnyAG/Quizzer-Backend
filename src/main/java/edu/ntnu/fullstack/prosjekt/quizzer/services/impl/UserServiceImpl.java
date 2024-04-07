@@ -1,9 +1,13 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.LoginDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizAttemptDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.SavedQuizAttemptDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.UserDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizAttemptEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
+import edu.ntnu.fullstack.prosjekt.quizzer.repositories.AttemptRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.UserRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
@@ -29,6 +33,8 @@ public class UserServiceImpl implements UserService {
    */
   private UserRepository userRepository;
 
+  private AttemptRepository attemptRepository;
+
   /**
    * Used for Dependency Injection.
    */
@@ -47,10 +53,12 @@ public class UserServiceImpl implements UserService {
    *                        used for salting and hashing passwords.
    */
   public UserServiceImpl(UserRepository userRepository,
-                         Mapper<UserEntity, UserDto> userMapper, PasswordEncoder passwordEncoder) {
+                         Mapper<UserEntity, UserDto> userMapper, PasswordEncoder passwordEncoder,
+                         AttemptRepository attemptRepository) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
     this.passwordEncoder = passwordEncoder;
+    this.attemptRepository = attemptRepository;
   }
 
 
@@ -175,5 +183,15 @@ public class UserServiceImpl implements UserService {
     String newHashedPassword = passwordEncoder.encode(newPassword);
     user.setPassword(newHashedPassword);
     userRepository.save(user);
+  }
+
+  @Override
+  public Page<SavedQuizAttemptDto> findAttemptsByUser(String username, Pageable pageable) {
+    UserEntity userEntity = findEntityByUsername(username);
+    Page<QuizAttemptEntity> quizAttemptEntities = attemptRepository.findQuizAttemptEntitiesByUser(userEntity, pageable);
+    return quizAttemptEntities.map(quizAttemptEntity -> {
+      SavedQuizAttemptDto quizAttemptDto = new ModelMapper().map(quizAttemptEntity, SavedQuizAttemptDto.class);
+      return quizAttemptDto;
+    });
   }
 }

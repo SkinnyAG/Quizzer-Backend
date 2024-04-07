@@ -2,7 +2,9 @@ package edu.ntnu.fullstack.prosjekt.quizzer.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.*;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
+import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,13 +31,16 @@ public class QuizController {
    */
   private QuizService quizService;
 
+  private UserService userService;
+
   /**
    * Used for Dependency Injection.
    *
    * @param quizService The injected QuizService object.
    */
-  public QuizController(QuizService quizService) {
+  public QuizController(QuizService quizService, UserService userService) {
     this.quizService = quizService;
+    this.userService = userService;
   }
 
   /**
@@ -45,11 +50,14 @@ public class QuizController {
    * @return A response with a status code and message. Fails necessary fields are missing.
    */
   @PostMapping()
-  public ResponseEntity<QuizDetailsDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
+  public ResponseEntity<MessageDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+    log.info("Username: " + username);
+    UserEntity userEntity = userService.findEntityByUsername(username);
     log.info("Request to createQuiz received with quiz: " + quizDetailsDto);
     try {
-      QuizDetailsDto responseDto = quizService.createQuiz(quizDetailsDto);
-      return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+      quizService.createQuiz(quizDetailsDto, userEntity);
+      return new ResponseEntity<>(new MessageDto("Created quiz"), HttpStatus.CREATED);
     } catch (Exception e) {
       log.info("An unforeseen error occurred");
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
@@ -112,5 +120,13 @@ public class QuizController {
   public ResponseEntity<List<CategoryDto>> getCategories() {
     List<CategoryDto> categories = quizService.findAllCategories();
     return new ResponseEntity<>(categories, HttpStatus.OK);
+  }
+
+  @CrossOrigin(origins = "*")
+  @PostMapping(path = "/{quizId}")
+  public ResponseEntity<QuizAttemptDto> submitAttempt(@PathVariable String quizId, @RequestBody QuizAttemptDto quizAttemptDto) {
+    log.info("QuizAttempt: " + quizAttemptDto);
+    String userId = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+    return new ResponseEntity<>(quizService.checkAnswers(quizId, quizAttemptDto, userService.findEntityByUsername(userId)), HttpStatus.OK);
   }
 }

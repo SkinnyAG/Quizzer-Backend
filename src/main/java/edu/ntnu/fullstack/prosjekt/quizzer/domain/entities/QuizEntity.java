@@ -3,20 +3,20 @@ package edu.ntnu.fullstack.prosjekt.quizzer.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * QuizEntity is one of the main entities in the application, acting as quizzes owned by users in
  * the database, and containing questions.
  */
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -63,4 +63,9 @@ public class QuizEntity {
   @JsonBackReference
   @JoinColumn(name = "username")
   private UserEntity owner;
+
+
+  @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+  @JsonManagedReference
+  private List<QuestionEntity> questions;
 }

@@ -1,20 +1,19 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.CategoryDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizGeneralDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.CategoryEntity;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
-import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.UserEntity;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.*;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.*;
 import edu.ntnu.fullstack.prosjekt.quizzer.mappers.Mapper;
+import edu.ntnu.fullstack.prosjekt.quizzer.repositories.AttemptRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.CategoryRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.repositories.QuizRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuizService;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.UserService;
 import lombok.extern.java.Log;
+import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +21,9 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,14 +46,13 @@ public class QuizServiceImpl implements QuizService {
 
   private Mapper<CategoryEntity, CategoryDto> categoryMapper;
 
-  /**
-   * Used for Dependency Injection.
-   */
-  private UserService userService;
+  private ObjectMapper objectMapper;
 
   private QuestionService questionService;
 
   private CategoryRepository categoryRepository;
+
+  private AttemptRepository attemptRepository;
 
 
   /**
@@ -60,15 +60,17 @@ public class QuizServiceImpl implements QuizService {
    *
    * @param quizRepository The Injected QuizRepository object.
    */
-  public QuizServiceImpl(QuizRepository quizRepository, CategoryRepository categoryRepository, UserService userService,
+  public QuizServiceImpl(QuizRepository quizRepository, CategoryRepository categoryRepository,
                          QuestionService questionService, Mapper<QuizEntity, QuizDetailsDto> quizMapper,
-                         Mapper<CategoryEntity, CategoryDto> categoryMapper) {
+                         Mapper<CategoryEntity, CategoryDto> categoryMapper, ObjectMapper objectMapper,
+                         AttemptRepository attemptRepository) {
     this.quizRepository = quizRepository;
     this.categoryRepository = categoryRepository;
     this.quizMapper = quizMapper;
-    this.userService = userService;
     this.questionService = questionService;
     this.categoryMapper = categoryMapper;
+    this.objectMapper = objectMapper;
+    this.attemptRepository = attemptRepository;
   }
 
   /**
@@ -78,7 +80,7 @@ public class QuizServiceImpl implements QuizService {
    * @return The created QuizEntity
    */
   @Override
-  public QuizDetailsDto createQuiz(QuizDetailsDto quizDetailsDto) {
+  public void createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity) {
     log.info("Creating quiz");
 
     if (quizDetailsDto.getTitle() == null || quizDetailsDto.getTitle().isEmpty()) {
@@ -86,17 +88,25 @@ public class QuizServiceImpl implements QuizService {
       throw new IllegalArgumentException("Undefined quiz title");
     }
 
-    UserEntity userEntity = userService.findEntityByUsername(quizDetailsDto.getOwner().getUsername());
+    //UserEntity userEntity = userService.findEntityByUsername(quizDetailsDto.getOwner().getUsername());
     if (userEntity == null) {
       log.info("Could not find user");
       throw new IllegalArgumentException("No user with username: " + quizDetailsDto.getOwner());
     }
+    log.info("Quizdetails in service: " + quizDetailsDto);
     QuizEntity quizEntity = quizMapper.mapFrom(quizDetailsDto);
+    log.info("Quizentity in service: " + quizEntity);
     quizEntity.setOwner(userEntity);
-
+    log.info("owner set");
+    log.info("questions: " + quizDetailsDto.getQuestions());
     QuizEntity savedQuizEntity = quizRepository.save(quizEntity);
+    questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
 
-    return quizMapper.mapTo(savedQuizEntity);
+    log.info("added questions");
+    log.info("Saved quiz entity: " + savedQuizEntity);
+
+    QuizDetailsDto savedQuizDto = quizMapper.mapTo(savedQuizEntity);
+    log.info("Saved quiz dto: " + savedQuizDto);
   }
 
   @Override
@@ -152,6 +162,7 @@ public class QuizServiceImpl implements QuizService {
   public QuizEntity findQuizEntityById(String quizId) {
     Long idValue = Long.parseLong(quizId);
     if (quizRepository.findById(idValue).isPresent()) {
+      log.info("Found QuizEntity");
       return quizRepository.findById(idValue).get();
     }
     return null;
@@ -176,6 +187,41 @@ public class QuizServiceImpl implements QuizService {
     QuizDetailsDto quizDetailsDto = quizMapper.mapTo(quizEntity);
     quizDetailsDto.setQuestions(questions);
     return quizDetailsDto;
+  }
+
+  @Override
+  public QuizAttemptDto checkAnswers(String quizId, QuizAttemptDto quizAttemptDto, UserEntity userEntity) {
+    List<QuestionDto> quizQuestions = questionService.getQuestionsByQuiz(findQuizEntityById(quizId));
+    List<QuestionAttemptDto> submittedAnswers = quizAttemptDto.getQuestionAttempts();
+    log.info("Questions in quiz: " + quizQuestions);
+    log.info("Quiz id: " + quizId);
+    for (int i = 0; i < quizQuestions.size(); i++) {
+      log.info("Inside first loop");
+      log.info("Question alternatives: " + quizQuestions.get(i).getAlternatives());
+      for (int j = 0; j < quizQuestions.get(i).getAlternatives().size(); j++) {
+        Object alternative = quizQuestions.get(i).getAlternatives().get(j);
+        if (alternative instanceof Map) {
+          log.info("Inside second loop");
+          Map<String, Object> alternativeMap = (Map<String, Object>) alternative;
+          String answer = (String) alternativeMap.get("answer");
+          Boolean isCorrect = (Boolean) alternativeMap.get("isCorrect");
+          if (answer.equalsIgnoreCase(submittedAnswers.get(i).getAnswerLabel()) && isCorrect) {
+            quizAttemptDto.setScore(quizAttemptDto.getScore() + 1);
+            quizAttemptDto.getQuestionAttempts().get(i).setAnsweredCorrect(true);
+          }
+        }
+      }
+    }
+    log.info("Quizattempt: " + quizAttemptDto.getQuestionAttempts());
+    QuizAttemptEntity quizAttemptEntity = new ModelMapper().map(quizAttemptDto, QuizAttemptEntity.class);
+    log.info("Found userENTITY: " + userEntity);
+    quizAttemptEntity.setUser(userEntity);
+    log.info("Not failed after setting user");
+    log.info("Found quizentity: " + findQuizEntityById(quizId));
+    quizAttemptEntity.setQuiz(findQuizEntityById(quizId));
+    log.info("Saving attempt: " + quizAttemptEntity);
+    attemptRepository.save(quizAttemptEntity);
+    return quizAttemptDto;
   }
 
   @Override

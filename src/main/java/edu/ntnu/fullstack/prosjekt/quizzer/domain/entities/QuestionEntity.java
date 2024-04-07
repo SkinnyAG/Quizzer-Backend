@@ -1,5 +1,14 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.*;
 import edu.ntnu.fullstack.prosjekt.quizzer.enums.QuestionType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +20,8 @@ import lombok.NoArgsConstructor;
  * QuestionEntity is one of the main entities in the application, acting as questions for quizzes in
  * the database.
  */
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -65,5 +75,6 @@ public class QuestionEntity {
    */
   @ManyToOne
   @JoinColumn(name = "quiz_Id")
+  @JsonBackReference
   private QuizEntity quiz;
 }

@@ -3,6 +3,7 @@ package edu.ntnu.fullstack.prosjekt.quizzer.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuestionDto;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.dto.QuizDetailsDto;
+import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuestionEntity;
 import edu.ntnu.fullstack.prosjekt.quizzer.domain.entities.QuizEntity;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public interface QuestionService {
   QuestionDto createQuestion(QuizEntity quizEntity, QuestionDto questionDto) throws JsonProcessingException;
 
   List<QuestionDto> getQuestionsByQuiz(QuizEntity quizEntity);
+
+  List<QuestionEntity> getQuestionEntitiesByQuiz(QuizEntity quizEntity);
 
   int getAmountOfQuestionsByQuiz(QuizEntity quizEntity);
 
