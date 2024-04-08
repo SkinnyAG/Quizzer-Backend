@@ -33,6 +33,9 @@ public class UserServiceImpl implements UserService {
    */
   private UserRepository userRepository;
 
+  /**
+   * Used for Dependency Injection.
+   */
   private AttemptRepository attemptRepository;
 
   /**
@@ -127,6 +130,12 @@ public class UserServiceImpl implements UserService {
     return null;
   }
 
+  /**
+   * Finds a user by its unique username.
+   *
+   * @param username Username of the user to locate.
+   * @return A Dto representing the found user.
+   */
   @Override
   public UserEntity findEntityByUsername(String username) {
     if (userRepository.findById(username).isPresent()) {
@@ -135,6 +144,13 @@ public class UserServiceImpl implements UserService {
     return null;
   }
 
+  /**
+   * Searches for users based on a search query.
+   *
+   * @param searchQuery The search query.
+   * @param pageable    The pageable object.
+   * @return A page of users.
+   */
   @Override
   public Page<UserDto> searchUsers(String searchQuery, Pageable pageable) {
     Page<UserEntity> users = userRepository.findAllByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCase(searchQuery, searchQuery, pageable);
@@ -185,6 +201,13 @@ public class UserServiceImpl implements UserService {
     userRepository.save(user);
   }
 
+    /**
+     * Finds quiz attempts based on a user.
+     *
+     * @param username the username of the user.
+     * @param pageable the pageable object.
+     * @return a page of attempts.
+     */
   @Override
   public Page<SavedQuizAttemptDto> findAttemptsByUser(String username, Pageable pageable) {
     UserEntity userEntity = findEntityByUsername(username);

@@ -5,12 +5,12 @@ services:
     image: mysql:8.3
     restart: always
     environment:
-      MYSQL_DATABASE: 'db-dev'
+      MYSQL_DATABASE: 'db-1'
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'changemeinprod'
       MYSQL_ROOT_PASSWORD: 'changemeinprodroot'
     ports:
       - '3306:3306'
-    expose:
-      - '3306'
+    volumes:
+      - ./src/main/resources/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
 

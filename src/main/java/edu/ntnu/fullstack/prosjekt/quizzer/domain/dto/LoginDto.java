@@ -12,7 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginDto {
+
+  /**
+   * The username field represents the username.
+   */
   private String username;
 
+    /**
+     * The password field represents the password.
+     */
   private String password;
 }

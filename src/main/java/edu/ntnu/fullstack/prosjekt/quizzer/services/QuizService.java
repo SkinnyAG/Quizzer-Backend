@@ -20,8 +20,6 @@ public interface QuizService {
    */
   void createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
 
-  QuestionDto addQuestionToQuiz(String quizId, QuestionDto questionDto) throws JsonProcessingException;
-
   /**
    * Service for finding a page of quizzes in the database.
    *
@@ -29,7 +27,17 @@ public interface QuizService {
    */
   Page<QuizGeneralDto> findPageOfQuizzes(Pageable pageable);
 
+
+  /**
+   * Service for finding a page of quizzes in the database based on a search query.
+   * @param searchQuery The search query.
+   * @param pageable The pageable object.
+   * @return A page of quizzes.
+   */
   Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable);
+
+
+
 
   /**
    * Service for finding a specific quiz given an id.
@@ -39,6 +47,11 @@ public interface QuizService {
    */
   QuizDetailsDto findQuizDtoById(String quizId);
 
+
+  /**
+   * Service for finding all quiz categories.
+   * @return A list of all categories.
+   */
   List<CategoryDto> findAllCategories();
 
   /**
@@ -49,11 +62,37 @@ public interface QuizService {
    */
   QuizEntity findQuizEntityById(String quizId);
 
+  /**
+   * Service for updating a quiz in the database.
+   * @param quizDetailsDto
+   */
   void updateQuizEntity(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
 
+  /**
+   * Service for deleting a quiz in the database.
+   * @param quizDetailsDto
+   */
   Boolean deleteQuizEntity(QuizDetailsDto quizDetailsDto);
 
+  /**
+   * Service for updating a quiz in the database.
+   * @param quizDetailsDto
+   */
+
+
+  /**
+   * Service for finding a detailed quiz given an id.
+   * @param quizId
+   * @return
+   */
   QuizDetailsDto findQuizDetails(String quizId);
 
+  /**
+   * Service for checking the answers of a quiz attempt.
+   * @param quizId
+   * @param quizAttemptDto
+   * @param userEntity
+   * @return
+   */
   QuizAttemptDto checkAnswers(String quizId, QuizAttemptDto quizAttemptDto, UserEntity userEntity);
 }
