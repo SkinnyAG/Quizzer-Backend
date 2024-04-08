@@ -49,7 +49,9 @@ public interface QuizService {
    */
   QuizEntity findQuizEntityById(String quizId);
 
-  void updateQuizEntity(QuizDetailsDto quizDetailsDto);
+  void updateQuizEntity(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
+
+  Boolean deleteQuizEntity(QuizDetailsDto quizDetailsDto);
 
   QuizDetailsDto findQuizDetails(String quizId);
 

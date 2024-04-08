@@ -26,7 +26,7 @@ public interface QuestionService {
 
   int getAmountOfQuestionsByQuiz(QuizEntity quizEntity);
 
-  void clearQuestionsByQuizEntity(QuizEntity quizEntity);
+  void deleteQuestionsByQuizEntity(QuizEntity quizEntity);
 
   void addListOfQuestions(List<QuestionDto> questionDtos, QuizEntity quizEntity);
 }

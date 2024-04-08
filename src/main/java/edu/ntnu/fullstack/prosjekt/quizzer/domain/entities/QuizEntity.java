@@ -66,7 +66,7 @@ public class QuizEntity {
   private UserEntity owner;
 
 
-  @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<QuestionEntity> questions;
 }

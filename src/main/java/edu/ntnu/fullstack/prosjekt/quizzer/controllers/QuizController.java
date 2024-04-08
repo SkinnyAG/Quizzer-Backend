@@ -64,6 +64,26 @@ public class QuizController {
     }
   }
 
+  @DeleteMapping
+  public ResponseEntity<MessageDto> deleteQuiz(@RequestBody QuizDetailsDto quizToDelete) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+    QuizDetailsDto actualEntry = quizService.findQuizDtoById(quizToDelete.getQuizId().toString());
+    UserEntity ownerEntity = userService.findEntityByUsername(actualEntry.getOwner().getUsername());
+
+     if (!quizToDelete.getOwner().getUsername().equals(username)
+            && actualEntry.getCollaborators().stream()
+            .noneMatch(userDto -> userDto.getUsername().equals(username))) {
+      return new ResponseEntity<>(new MessageDto("You are not authorized to update this quiz"), HttpStatus.UNAUTHORIZED);
+    }
+
+    Boolean deleted = quizService.deleteQuizEntity(quizToDelete);
+     if (deleted) {
+       return new ResponseEntity<>(new MessageDto("Quiz has been deleted"), HttpStatus.OK);
+     }
+    return new ResponseEntity<>(new MessageDto("Quiz could not be deleted"), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
   @PutMapping
   public ResponseEntity<MessageDto> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
     log.info("Questions: " + updatedQuizDto.getQuestions());
@@ -71,16 +91,20 @@ public class QuizController {
     // Check the username
     String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
+
     QuizDetailsDto actualEntry = quizService.findQuizDtoById(updatedQuizDto.getQuizId().toString());
+    UserEntity userEntity = userService.findEntityByUsername(actualEntry.getOwner().getUsername());
 
     // The user must either be the owner, or a collaborator
-    if (!updatedQuizDto.getOwner().getUsername().equals(username)
+    /*if (!updatedQuizDto.getOwner().getUsername().equals(username)
             && actualEntry.getCollaborators().stream()
             .noneMatch(userDto -> userDto.getUsername().equals(username))) {
       return new ResponseEntity<>(new MessageDto("You are not authorized to update this quiz"), HttpStatus.UNAUTHORIZED);
-    }
+    }*/
 
-    quizService.updateQuizEntity(updatedQuizDto);
+    log.info("Before entering service");
+    quizService.updateQuizEntity(updatedQuizDto, userEntity);
+    quizService.createQuiz(updatedQuizDto, userEntity);
     return new ResponseEntity<>(new MessageDto("Quiz updated"), HttpStatus.OK);
   }
 
