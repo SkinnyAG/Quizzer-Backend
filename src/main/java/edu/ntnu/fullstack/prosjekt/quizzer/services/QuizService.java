@@ -18,7 +18,7 @@ public interface QuizService {
    *
    * @param quizDetailsDto QuizDetailsDto that should be added.
    */
-  void createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
+  QuizDetailsDto createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
 
   /**
    * Service for finding a page of quizzes in the database.
@@ -64,13 +64,15 @@ public interface QuizService {
 
   /**
    * Service for updating a quiz in the database.
-   * @param quizDetailsDto
+   *
+   * @param quizDetailsDto New quiz
    */
   void updateQuizEntity(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
 
   /**
    * Service for deleting a quiz in the database.
-   * @param quizDetailsDto
+   *
+   * @param quizDetailsDto New quiz
    */
   Boolean deleteQuizEntity(QuizDetailsDto quizDetailsDto);
 

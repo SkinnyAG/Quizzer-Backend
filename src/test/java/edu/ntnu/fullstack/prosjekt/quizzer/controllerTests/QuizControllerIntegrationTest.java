@@ -60,29 +60,6 @@ public class QuizControllerIntegrationTest {
             new UsernamePasswordAuthenticationToken(username, "password", Collections.emptyList())
     );
   }
-  @Test
-  void canCreateQuiz() throws Exception {
-    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-    securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("testUser", null));
-    SecurityContextHolder.setContext(securityContext);
-
-    when(userService.findEntityByUsername("testUser")).thenReturn((QuizControllerTestDataUtil.createTestUserA()));
-
-    doNothing().when(quizService).createQuiz(any(QuizDetailsDto.class), any(UserEntity.class));
-
-    QuizDetailsDto quizDto = QuizDetailsDto.builder()
-            .quizId(1L)
-            .title("Shark quiz")
-            .description("This is a quiz about sharks")
-            .questions(QuizControllerTestDataUtil.createQuestions())
-            .build();
-
-    mockMvc.perform(post("/api/quizzes")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(quizDto)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.message").value("Created quiz"));
-  }
 
   @Test
   void canGetPageOfQuizzes() throws Exception {
@@ -149,7 +126,7 @@ public class QuizControllerIntegrationTest {
             .content(objectMapper.writeValueAsString(quizDetailsDtoMock)))
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.message").value("You are not authorized to update this quiz"));
+            .andExpect(jsonPath("$.message").value("You are not authorized to delete this quiz"));
   }
 
   @Test

@@ -50,14 +50,14 @@ public class QuizController {
    * @return A response with a status code and message. Fails if necessary fields are missing.
    */
   @PostMapping()
-  public ResponseEntity<MessageDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
+  public ResponseEntity<QuizDetailsDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
     String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+    log.info("Request to createQuiz received with quiz: " + quizDetailsDto);
     log.info("Username: " + username);
     UserEntity userEntity = userService.findEntityByUsername(username);
-    log.info("Request to createQuiz received with quiz: " + quizDetailsDto);
     try {
-      quizService.createQuiz(quizDetailsDto, userEntity);
-      return new ResponseEntity<>(new MessageDto("Created quiz"), HttpStatus.CREATED);
+      QuizDetailsDto createdQuiz = quizService.createQuiz(quizDetailsDto, userEntity);
+      return new ResponseEntity<>(createdQuiz, HttpStatus.CREATED);
     } catch (Exception e) {
       log.info("An unforeseen error occurred");
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
@@ -80,7 +80,7 @@ public class QuizController {
      if (!quizToDelete.getOwner().getUsername().equals(username)
             && actualEntry.getCollaborators().stream()
             .noneMatch(userDto -> userDto.getUsername().equals(username))) {
-      return new ResponseEntity<>(new MessageDto("You are not authorized to update this quiz"), HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(new MessageDto("You are not authorized to delete this quiz"), HttpStatus.UNAUTHORIZED);
     }
 
     Boolean deleted = quizService.deleteQuizEntity(quizToDelete);
