@@ -28,6 +28,16 @@ CREATE TABLE `attempt_id_seq` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `attempt_id_seq`
+--
+
+LOCK TABLES `attempt_id_seq` WRITE;
+/*!40000 ALTER TABLE `attempt_id_seq` DISABLE KEYS */;
+INSERT INTO `attempt_id_seq` VALUES (101);
+/*!40000 ALTER TABLE `attempt_id_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `categories`
 --
 
@@ -39,6 +49,16 @@ CREATE TABLE `categories` (
                               PRIMARY KEY (`category_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categories`
+--
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES ('Art'),('Geography'),('History'),('Literature'),('Mathematics'),('Music'),('Pop Culture'),('Science'),('Sports'),('Technology');
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `categories_quizzes`
@@ -58,6 +78,15 @@ CREATE TABLE `categories_quizzes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `categories_quizzes`
+--
+
+LOCK TABLES `categories_quizzes` WRITE;
+/*!40000 ALTER TABLE `categories_quizzes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `categories_quizzes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `question_id_seq`
 --
 
@@ -68,6 +97,16 @@ CREATE TABLE `question_id_seq` (
     `next_val` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `question_id_seq`
+--
+
+LOCK TABLES `question_id_seq` WRITE;
+/*!40000 ALTER TABLE `question_id_seq` DISABLE KEYS */;
+INSERT INTO `question_id_seq` VALUES (151);
+/*!40000 ALTER TABLE `question_id_seq` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `questions`
@@ -92,6 +131,16 @@ CREATE TABLE `questions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `questions`
+--
+
+LOCK TABLES `questions` WRITE;
+/*!40000 ALTER TABLE `questions` DISABLE KEYS */;
+INSERT INTO `questions` VALUES (1,'[QuestionAnswersDto(answer=Code!, isCorrect=true), QuestionAnswersDto(answer=Not Code :/, isCorrect=false)]',NULL,'What is the most fun thing to do?',NULL,NULL,NULL),(2,'[QuestionAnswersDto(answer=Trondheim, isCorrect=true), QuestionAnswersDto(answer=Oslo, isCorrect=false), QuestionAnswersDto(answer=Drammen, isCorrect=false)]',NULL,'Where is NTNU Gløshaugem?',NULL,NULL,NULL),(3,'[{\"answer\":\"Code!\",\"isCorrect\":true},{\"answer\":\"Not Code :/\",\"isCorrect\":false}]',NULL,'What is the most fun thing to do?',NULL,NULL,1),(4,'[{\"answer\":\"Trondheim\",\"isCorrect\":true},{\"answer\":\"Oslo\",\"isCorrect\":false},{\"answer\":\"Drammen\",\"isCorrect\":false}]',NULL,'Where is NTNU Gløshaugem?',NULL,NULL,1),(52,'[QuestionAnswersDto(answer=2, isCorrect=true), QuestionAnswersDto(answer=4, isCorrect=false), QuestionAnswersDto(answer=6, isCorrect=false)]',NULL,'1+1',NULL,NULL,NULL),(53,'[QuestionAnswersDto(answer=5, isCorrect=null), QuestionAnswersDto(answer=3, isCorrect=false), QuestionAnswersDto(answer=6, isCorrect=true)]',NULL,'3+3',NULL,NULL,NULL),(54,'[{\"answer\":\"2\",\"isCorrect\":true},{\"answer\":\"4\",\"isCorrect\":false},{\"answer\":\"6\",\"isCorrect\":false}]',NULL,'1+1',NULL,NULL,2),(55,'[{\"answer\":\"5\",\"isCorrect\":null},{\"answer\":\"3\",\"isCorrect\":false},{\"answer\":\"6\",\"isCorrect\":true}]',NULL,'3+3',NULL,NULL,2);
+/*!40000 ALTER TABLE `questions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `quiz_attempt_entity`
 --
 
@@ -113,6 +162,16 @@ CREATE TABLE `quiz_attempt_entity` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `quiz_attempt_entity`
+--
+
+LOCK TABLES `quiz_attempt_entity` WRITE;
+/*!40000 ALTER TABLE `quiz_attempt_entity` DISABLE KEYS */;
+INSERT INTO `quiz_attempt_entity` VALUES (1,2,NULL,1,'henrik'),(2,2,NULL,2,'henrik');
+/*!40000 ALTER TABLE `quiz_attempt_entity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `quiz_id_seq`
 --
 
@@ -123,6 +182,16 @@ CREATE TABLE `quiz_id_seq` (
     `next_val` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `quiz_id_seq`
+--
+
+LOCK TABLES `quiz_id_seq` WRITE;
+/*!40000 ALTER TABLE `quiz_id_seq` DISABLE KEYS */;
+INSERT INTO `quiz_id_seq` VALUES (101);
+/*!40000 ALTER TABLE `quiz_id_seq` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `quizzes`
@@ -144,6 +213,16 @@ CREATE TABLE `quizzes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `quizzes`
+--
+
+LOCK TABLES `quizzes` WRITE;
+/*!40000 ALTER TABLE `quizzes` DISABLE KEYS */;
+INSERT INTO `quizzes` VALUES (1,'Fun quiz!','https://assets.teenvogue.com/photos/630e3461281b8485f604d293/16:9/w_2560%2Cc_limit/GettyImages-1083856216.jpg','Fun Quiz!','henrik'),(2,'Math Quiz','https://miro.medium.com/v2/resize:fit:1400/1*L76A5gL6176UbMgn7q4Ybg.jpeg','Math Quiz','frikk');
+/*!40000 ALTER TABLE `quizzes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `quizzes_categories`
 --
 
@@ -159,6 +238,15 @@ CREATE TABLE `quizzes_categories` (
                                       CONSTRAINT `FKcrshdrgulipwsh52mqhdude11` FOREIGN KEY (`categories_category_name`) REFERENCES `categories` (`category_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `quizzes_categories`
+--
+
+LOCK TABLES `quizzes_categories` WRITE;
+/*!40000 ALTER TABLE `quizzes_categories` DISABLE KEYS */;
+/*!40000 ALTER TABLE `quizzes_categories` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `quizzes_collaborators`
@@ -178,6 +266,16 @@ CREATE TABLE `quizzes_collaborators` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `quizzes_collaborators`
+--
+
+LOCK TABLES `quizzes_collaborators` WRITE;
+/*!40000 ALTER TABLE `quizzes_collaborators` DISABLE KEYS */;
+INSERT INTO `quizzes_collaborators` VALUES (2,'henrik');
+/*!40000 ALTER TABLE `quizzes_collaborators` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -192,6 +290,16 @@ CREATE TABLE `users` (
                          PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('frikk','frikk@mail.com','frikk','$2a$10$1AHRmjNe3bWU2MV3jQrdeuZm2MAQZprwdlN4TLGINBCYW32oM.tA2'),('henrik','henrik@mail.com','Henrik','$2a$10$esrqiQJgpGGdPXRGr2sspOLtzM2YYAWgV/UNoGTDcUe/HmTwkV90u');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -202,27 +310,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-08  2:16:15
-
--- Populate the users table
-INSERT INTO `users` (`username`, `email`, `full_name`, `password`) VALUES
-                                                                       ('user1', 'user1@example.com', 'User One', 'password1'),
-                                                                       ('user2', 'user2@example.com', 'User Two', 'password2');
-
--- Populate the categories table
-INSERT INTO `categories` (`category_name`) VALUES
-                                               ('Science'),
-                                               ('Mathematics');
-
--- Populate the quizzes table (assuming 'username' refers to a user that creates the quiz)
-INSERT INTO `quizzes` (`quiz_id`, `description`, `image_link`, `title`, `username`) VALUES
-                                                                                        (1, 'A science quiz about general knowledge in biology.', NULL, 'Biology Basics', 'user1'),
-                                                                                        (2, 'Math quiz covering basic algebra.', NULL, 'Algebra 101', 'user2');
-
--- Populate the categories_quizzes junction table to associate categories with quizzes
-INSERT INTO `categories_quizzes` (`category_entity_category_name`, `quizzes_quiz_id`) VALUES
-                                                                                          ('Science', 1),
-                                                                                          ('Mathematics', 2);
-
--- Assuming there are more tables that require initial data,
--- similar INSERT statements can be added here following the same pattern.
+-- Dump completed on 2024-04-08  4:30:35
