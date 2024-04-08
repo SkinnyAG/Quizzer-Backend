@@ -64,6 +64,31 @@ public class QuizController {
     }
   }
 
+  /**
+   * Endpoint for deleting an existing quiz.
+   *
+   * @param quizToDelete The quiz to be deleted.
+   * @return A response with a status code and message. Fails if necessary fields are missing.
+   */
+  @DeleteMapping
+  public ResponseEntity<MessageDto> deleteQuiz(@RequestBody QuizDetailsDto quizToDelete) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+    QuizDetailsDto actualEntry = quizService.findQuizDtoById(quizToDelete.getQuizId().toString());
+    UserEntity ownerEntity = userService.findEntityByUsername(actualEntry.getOwner().getUsername());
+
+     if (!quizToDelete.getOwner().getUsername().equals(username)
+            && actualEntry.getCollaborators().stream()
+            .noneMatch(userDto -> userDto.getUsername().equals(username))) {
+      return new ResponseEntity<>(new MessageDto("You are not authorized to delete this quiz"), HttpStatus.UNAUTHORIZED);
+    }
+
+    Boolean deleted = quizService.deleteQuizEntity(quizToDelete);
+     if (deleted) {
+       return new ResponseEntity<>(new MessageDto("Quiz has been deleted"), HttpStatus.OK);
+     }
+    return new ResponseEntity<>(new MessageDto("Quiz could not be deleted"), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
   @PutMapping
   public ResponseEntity<MessageDto> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
     log.info("Questions: " + updatedQuizDto.getQuestions());
