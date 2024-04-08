@@ -27,10 +27,16 @@ public class QuestionServiceImpl implements QuestionService {
    */
   private QuestionRepository questionRepository;
 
+  /**
+   * Used for Dependency Injection.
+   */
   private ObjectMapper objectMapper;
 
-
+  /**
+   * Used for Dependency Injection.
+   */
   private Mapper<QuestionEntity, QuestionDto> questionMapper;
+
 
   /**
    * Used for Dependency Injection.
@@ -74,6 +80,12 @@ public class QuestionServiceImpl implements QuestionService {
     return savedQuestionDto;
   }
 
+  /**
+   * Finds questions belonging to a quiz.
+   *
+   * @param quizEntity The quiz to find questions for.
+   * @return A list of questions as dtos.
+   */
   @Override
   public List<QuestionDto> getQuestionsByQuiz(QuizEntity quizEntity) {
     List<QuestionEntity> questionEntities = questionRepository.findQuestionEntitiesByQuiz(quizEntity);
@@ -84,16 +96,22 @@ public class QuestionServiceImpl implements QuestionService {
     return questionDtos;
   }
 
-  public List<QuestionEntity> getQuestionEntitiesByQuiz(QuizEntity quizEntity) {
-    List<QuestionEntity> questions = questionRepository.findQuestionEntitiesByQuiz(quizEntity);
-    return questions;
-  }
-
+  /**
+   * Finds amount of questions belonging to a quiz.
+   *
+   * @param quizEntity The quiz to find questions for.
+   * @return The amount of questions.
+   */
   @Override
   public int getAmountOfQuestionsByQuiz(QuizEntity quizEntity) {
     return questionRepository.findQuestionEntitiesByQuiz(quizEntity).size();
   }
 
+  /**
+   * Clears all questions belonging to a quiz.
+   *
+   * @param quizEntity The quiz to clear questions for.
+   */
   @Override
   public void clearQuestionsByQuizEntity(QuizEntity quizEntity) {
     List<QuestionEntity> questionEntities = questionRepository.findQuestionEntitiesByQuiz(quizEntity);
@@ -102,6 +120,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
   }
 
+  /**
+   * Adds a list of questions to a quiz.
+   *
+   * @param questionDtos The list of questions to add.
+   * @param quizEntity   The quiz to add questions to.
+   */
   @Override
   public void addListOfQuestions(List<QuestionDto> questionDtos, QuizEntity quizEntity) {
     log.info("Starting to add questions");
@@ -114,6 +138,12 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
 
+  /**
+   * Maps a question entity to a question dto.
+   *
+   * @param questionEntity The question entity to map.
+   * @return The mapped question dto.
+   */
   public QuestionDto mapFromJson(QuestionEntity questionEntity) {
     QuestionDto questionDto = questionMapper.mapTo(questionEntity);
     if (questionEntity.getAlternatives() != null) {
@@ -127,6 +157,13 @@ public class QuestionServiceImpl implements QuestionService {
     return null;
   }
 
+  /**
+   * Maps a list of question dtos to a question entity.
+   *
+   * @param questions      The list of question dtos to map.
+   * @param questionEntity The question entity to map to.
+   * @return The mapped question entity.
+   */
   public QuestionEntity mapToJson(List<QuestionAnswersDto> questions, QuestionEntity questionEntity) {
     if (questions != null && questionEntity != null) {
       try {

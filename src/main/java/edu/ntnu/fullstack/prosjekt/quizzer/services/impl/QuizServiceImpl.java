@@ -111,16 +111,6 @@ public class QuizServiceImpl implements QuizService {
     log.info("Saved quiz dto: " + savedQuizDto);
   }
 
-  @Override
-  public QuestionDto addQuestionToQuiz(String quizId, QuestionDto questionDto) throws JsonProcessingException {
-    if (quizRepository.findById(Long.parseLong(quizId)).isPresent()) {
-      QuizEntity quizEntity = quizRepository.findById(Long.parseLong(quizId)).get();
-      return questionService.createQuestion(quizEntity, questionDto);
-    }
-    return null;
-  }
-
-
   /**
    * Finds a page of quizzes in the database.
    *
@@ -170,6 +160,11 @@ public class QuizServiceImpl implements QuizService {
     throw new ResponseStatusException(HttpStatus.NOT_FOUND);
   }
 
+  /**
+   * Updates a quiz in the database.
+   *
+   * @param quizDetailsDto The updated quiz.
+   */
   @Transactional
   @Override
   public void updateQuizEntity(QuizDetailsDto quizDetailsDto) {
@@ -182,6 +177,11 @@ public class QuizServiceImpl implements QuizService {
     quizRepository.save(updatedQuizEntity);
   }
 
+  /**
+   * Finds a detailed quiz given an id.
+   * @param quizId The id of the quiz.
+   * @return The quiz as a dto.
+   */
   @Override
   public QuizDetailsDto findQuizDetails(String quizId) {
     QuizEntity quizEntity = findQuizEntityById(quizId);
@@ -191,6 +191,13 @@ public class QuizServiceImpl implements QuizService {
     return quizDetailsDto;
   }
 
+  /**
+   * Checks the answers of a quiz attempt.
+   * @param quizId The id of the quiz.
+   * @param quizAttemptDto The attempt to check.
+   * @param userEntity The user who attempted the quiz.
+   * @return The attempt with the score.
+   */
   @Override
   public QuizAttemptDto checkAnswers(String quizId, QuizAttemptDto quizAttemptDto, UserEntity userEntity) {
     List<QuestionDto> quizQuestions = questionService.getQuestionsByQuiz(findQuizEntityById(quizId));
@@ -206,8 +213,9 @@ public class QuizServiceImpl implements QuizService {
           log.info("Inside second loop");
           Map<String, Object> alternativeMap = (Map<String, Object>) alternative;
           String answer = (String) alternativeMap.get("answer");
-          Boolean isCorrect = (Boolean) alternativeMap.get("isCorrect");
-          if (answer.equalsIgnoreCase(submittedAnswers.get(i).getAnswerLabel()) && isCorrect) {
+          Object isCorrect = alternativeMap.get("isCorrect");
+          boolean casted = isCorrect != null && (boolean) isCorrect;
+          if (answer.equalsIgnoreCase(submittedAnswers.get(i).getAnswerLabel()) && casted) {
             quizAttemptDto.setScore(quizAttemptDto.getScore() + 1);
             quizAttemptDto.getQuestionAttempts().get(i).setAnsweredCorrect(true);
           }
@@ -226,6 +234,12 @@ public class QuizServiceImpl implements QuizService {
     return quizAttemptDto;
   }
 
+  /**
+   * Filters quizzes based on a search query.
+   * @param searchQuery The search query.
+   * @param pageable The pageable object.
+   * @return A page of quizzes.
+   */
   @Override
   public Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable) {
     Page<QuizEntity> quizEntityPage = quizRepository.findByCategoriesInOrTitleContaining(searchQuery, pageable);
@@ -237,6 +251,10 @@ public class QuizServiceImpl implements QuizService {
     });
   }
 
+  /**
+   * Finds all quiz categories.
+   * @return A list of all categories.
+   */
   public List<CategoryDto> findAllCategories() {
     List<CategoryDto> categories = categoryRepository.findAll().stream().map(categoryEntity -> categoryMapper.mapTo(categoryEntity)).toList();
     return categories;
