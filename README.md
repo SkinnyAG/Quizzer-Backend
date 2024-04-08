@@ -1,4 +1,4 @@
-# Quizzer Back-End
+# Quizzer Backend
 
 Welcome to the quizzer back-end! This file should help you get started with this project.
 
