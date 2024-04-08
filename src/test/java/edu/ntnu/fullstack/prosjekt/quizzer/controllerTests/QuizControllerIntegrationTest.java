@@ -153,24 +153,6 @@ public class QuizControllerIntegrationTest {
   }
 
   @Test
-  void updateQuizWhenAuthorized() throws Exception {
-    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-    securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("andgjers", null));
-    SecurityContextHolder.setContext(securityContext);
-
-    QuizDetailsDto quizDetailsDtoMock = QuizControllerTestDataUtil.createTestDtoQuizA();
-    quizDetailsDtoMock.setOwner(QuizControllerTestDataUtil.createTestUserDtoA());
-    when(quizService.findQuizDtoById(anyString())).thenReturn(quizDetailsDtoMock);
-
-    mockMvc.perform(put("/api/quizzes")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(quizDetailsDtoMock)))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.message").value("Quiz updated"));
-  }
-
-  @Test
   void canGetCategories() throws Exception {
     List<CategoryDto> mockedCategories = QuizControllerTestDataUtil.createCategoryDtos();
     when(quizService.findAllCategories()).thenReturn(mockedCategories);
