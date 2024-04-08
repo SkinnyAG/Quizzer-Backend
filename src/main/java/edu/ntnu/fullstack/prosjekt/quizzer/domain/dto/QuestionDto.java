@@ -2,6 +2,7 @@ package edu.ntnu.fullstack.prosjekt.quizzer.domain.dto;
 
 import edu.ntnu.fullstack.prosjekt.quizzer.enums.QuestionType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class QuestionDto {
   /**

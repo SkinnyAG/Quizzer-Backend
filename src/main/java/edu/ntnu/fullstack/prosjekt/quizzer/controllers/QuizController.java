@@ -112,8 +112,12 @@ public class QuizController {
   @GetMapping(path = "/{quizId}")
   public ResponseEntity<QuizDetailsDto> getQuizDetails(@PathVariable String quizId) {
     QuizDetailsDto quizDetailsDto = quizService.findQuizDetails(quizId);
-    log.info("Received questions: " + quizDetailsDto);
-    return new ResponseEntity<>(quizDetailsDto, HttpStatus.OK);
+    if (quizDetailsDto != null) {
+      log.info("Received questions: " + quizDetailsDto);
+      return new ResponseEntity<>(quizDetailsDto, HttpStatus.OK);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @GetMapping(path = "/categories")

@@ -1,6 +1,7 @@
 package edu.ntnu.fullstack.prosjekt.quizzer.domain.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class QuizDetailsDto {
   /**
    * The quizId field is a unique identifier and primary key for a quiz entry in
