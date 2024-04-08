@@ -66,7 +66,19 @@ public interface QuizService {
    * Service for updating a quiz in the database.
    * @param quizDetailsDto
    */
-  void updateQuizEntity(QuizDetailsDto quizDetailsDto);
+  void updateQuizEntity(QuizDetailsDto quizDetailsDto, UserEntity userEntity);
+
+  /**
+   * Service for deleting a quiz in the database.
+   * @param quizDetailsDto
+   */
+  Boolean deleteQuizEntity(QuizDetailsDto quizDetailsDto);
+
+  /**
+   * Service for updating a quiz in the database.
+   * @param quizDetailsDto
+   */
+
 
   /**
    * Service for finding a detailed quiz given an id.

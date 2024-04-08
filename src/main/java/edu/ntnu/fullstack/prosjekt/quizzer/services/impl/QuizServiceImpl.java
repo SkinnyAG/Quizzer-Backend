@@ -165,16 +165,31 @@ public class QuizServiceImpl implements QuizService {
    *
    * @param quizDetailsDto The updated quiz.
    */
-  @Transactional
   @Override
-  public void updateQuizEntity(QuizDetailsDto quizDetailsDto) {
+  public void updateQuizEntity(QuizDetailsDto quizDetailsDto, UserEntity userEntity) {
+    /*
     log.info("Quiz id: " + quizDetailsDto.getQuizId());
     log.info("Quiz title: " + quizDetailsDto.getTitle());
-    QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
     questionService.clearQuestionsByQuizEntity(quizEntity);
     questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
     QuizEntity updatedQuizEntity = new ModelMapper().map(quizDetailsDto, QuizEntity.class);
-    quizRepository.save(updatedQuizEntity);
+    quizRepository.save(updatedQuizEntity);*/
+    QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
+    log.info("Before trying to delete questions");
+    questionService.deleteQuestionsByQuizEntity(quizEntity);
+    quizRepository.delete(quizEntity);
+    log.info("Tried deleting");
+    log.info("Is deleted: " + quizRepository.findById(quizEntity.getQuizId()));
+    createQuiz(quizDetailsDto, userEntity);
+  }
+
+  @Override
+  public Boolean deleteQuizEntity(QuizDetailsDto quizDetailsDto) {
+    QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
+    quizRepository.delete(quizEntity);
+    if (quizRepository.findById(quizEntity.getQuizId()).isPresent()) {
+      return false;
+    } return true;
   }
 
   /**

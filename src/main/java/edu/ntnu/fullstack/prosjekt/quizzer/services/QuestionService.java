@@ -34,11 +34,15 @@ public interface QuestionService {
    */
   int getAmountOfQuestionsByQuiz(QuizEntity quizEntity);
 
+
+ 
+
   /**
-   * Service for clearing all questions belonging to a quiz.
+   * Service for deleting all questions belonging to a quiz.
    * @param quizEntity The quiz to clear questions for.
    */
-  void clearQuestionsByQuizEntity(QuizEntity quizEntity);
+  void deleteQuestionsByQuizEntity(QuizEntity quizEntity);
+
 
 
   /**

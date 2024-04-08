@@ -25,10 +25,11 @@ public class QuizAttemptEntity {
    */
   private Integer score;
 
+
     /**
-     * The timeUsed field represents the time the user used on the quiz attempt.
+     * The duration field represents the time the user used on the quiz attempt.
      */
-  private Integer timeUsed;
+  private Integer duration;
 
     /**
      * The user field represents the user that attempted the quiz.
