@@ -50,14 +50,14 @@ public class QuizController {
    * @return A response with a status code and message. Fails necessary fields are missing.
    */
   @PostMapping()
-  public ResponseEntity<MessageDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
+  public ResponseEntity<QuizDetailsDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
     String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
     log.info("Username: " + username);
     UserEntity userEntity = userService.findEntityByUsername(username);
     log.info("Request to createQuiz received with quiz: " + quizDetailsDto);
     try {
-      quizService.createQuiz(quizDetailsDto, userEntity);
-      return new ResponseEntity<>(new MessageDto("Created quiz"), HttpStatus.CREATED);
+      QuizDetailsDto createdQuiz = quizService.createQuiz(quizDetailsDto, userEntity);
+      return new ResponseEntity<>(createdQuiz, HttpStatus.CREATED);
     } catch (Exception e) {
       log.info("An unforeseen error occurred");
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
