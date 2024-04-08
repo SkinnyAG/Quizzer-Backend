@@ -47,7 +47,7 @@ public class QuizController {
    * Endpoint for creating a new quiz.
    *
    * @param quizDetailsDto The quiz to be created.
-   * @return A response with a status code and message. Fails necessary fields are missing.
+   * @return A response with a status code and message. Fails if necessary fields are missing.
    */
   @PostMapping()
   public ResponseEntity<MessageDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
@@ -64,6 +64,12 @@ public class QuizController {
     }
   }
 
+  /**
+   * Endpoint for deleting an existing quiz.
+   *
+   * @param quizToDelete The quiz to be deleted.
+   * @return A response with a status code and message. Fails if necessary fields are missing.
+   */
   @DeleteMapping
   public ResponseEntity<MessageDto> deleteQuiz(@RequestBody QuizDetailsDto quizToDelete) {
     String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();

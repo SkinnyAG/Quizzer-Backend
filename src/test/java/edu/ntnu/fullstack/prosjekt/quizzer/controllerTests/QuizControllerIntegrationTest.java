@@ -135,7 +135,7 @@ public class QuizControllerIntegrationTest {
   }
 
   @Test
-  void updateQuizReturnsUnauthorized() throws Exception {
+  void deleteQuizReturnsUnauthorized() throws Exception {
     SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
     securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("testUser", null));
     SecurityContextHolder.setContext(securityContext);
@@ -144,30 +144,12 @@ public class QuizControllerIntegrationTest {
     quizDetailsDtoMock.setOwner(QuizControllerTestDataUtil.createTestUserDtoA());
     when(quizService.findQuizDtoById(anyString())).thenReturn(quizDetailsDtoMock);
 
-    mockMvc.perform(put("/api/quizzes")
+    mockMvc.perform(delete("/api/quizzes")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(quizDetailsDtoMock)))
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.message").value("You are not authorized to update this quiz"));
-  }
-
-  @Test
-  void updateQuizWhenAuthorized() throws Exception {
-    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-    securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("andgjers", null));
-    SecurityContextHolder.setContext(securityContext);
-
-    QuizDetailsDto quizDetailsDtoMock = QuizControllerTestDataUtil.createTestDtoQuizA();
-    quizDetailsDtoMock.setOwner(QuizControllerTestDataUtil.createTestUserDtoA());
-    when(quizService.findQuizDtoById(anyString())).thenReturn(quizDetailsDtoMock);
-
-    mockMvc.perform(put("/api/quizzes")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(quizDetailsDtoMock)))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.message").value("Quiz updated"));
   }
 
   @Test
