@@ -68,7 +68,7 @@ public class QuizControllerIntegrationTest {
 
     when(userService.findEntityByUsername("testUser")).thenReturn((QuizControllerTestDataUtil.createTestUserA()));
 
-    doNothing().when(quizService).createQuiz(any(QuizDetailsDto.class), any(UserEntity.class));
+    when(quizService.createQuiz(any(QuizDetailsDto.class), any(UserEntity.class))).thenReturn(new QuizDetailsDto());
 
     QuizDetailsDto quizDto = QuizDetailsDto.builder()
             .quizId(1L)
