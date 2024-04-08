@@ -73,7 +73,7 @@ public class QuestionEntity {
    * The quiz field references which quiz the question belongs to, in a many questions to
    * one quiz relationship.
    */
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "quiz_Id")
   @JsonBackReference
   private QuizEntity quiz;

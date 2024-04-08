@@ -47,7 +47,7 @@ public class QuizController {
    * Endpoint for creating a new quiz.
    *
    * @param quizDetailsDto The quiz to be created.
-   * @return A response with a status code and message. Fails necessary fields are missing.
+   * @return A response with a status code and message. Fails if necessary fields are missing.
    */
   @PostMapping()
   public ResponseEntity<QuizDetailsDto> createQuiz(@RequestBody QuizDetailsDto quizDetailsDto) {
@@ -89,6 +89,8 @@ public class QuizController {
      }
     return new ResponseEntity<>(new MessageDto("Quiz could not be deleted"), HttpStatus.INTERNAL_SERVER_ERROR);
   }
+
+
   @PutMapping
   public ResponseEntity<MessageDto> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
     log.info("Questions: " + updatedQuizDto.getQuestions());
@@ -96,16 +98,20 @@ public class QuizController {
     // Check the username
     String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
+
     QuizDetailsDto actualEntry = quizService.findQuizDtoById(updatedQuizDto.getQuizId().toString());
+    UserEntity userEntity = userService.findEntityByUsername(actualEntry.getOwner().getUsername());
 
     // The user must either be the owner, or a collaborator
-    if (!updatedQuizDto.getOwner().getUsername().equals(username)
+    /*if (!updatedQuizDto.getOwner().getUsername().equals(username)
             && actualEntry.getCollaborators().stream()
             .noneMatch(userDto -> userDto.getUsername().equals(username))) {
       return new ResponseEntity<>(new MessageDto("You are not authorized to update this quiz"), HttpStatus.UNAUTHORIZED);
-    }
+    }*/
 
-    quizService.updateQuizEntity(updatedQuizDto);
+    log.info("Before entering service");
+    quizService.updateQuizEntity(updatedQuizDto, userEntity);
+    quizService.createQuiz(updatedQuizDto, userEntity);
     return new ResponseEntity<>(new MessageDto("Quiz updated"), HttpStatus.OK);
   }
 

@@ -12,6 +12,7 @@ import edu.ntnu.fullstack.prosjekt.quizzer.repositories.QuestionRepository;
 import edu.ntnu.fullstack.prosjekt.quizzer.services.QuestionService;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -113,11 +114,11 @@ public class QuestionServiceImpl implements QuestionService {
    * @param quizEntity The quiz to clear questions for.
    */
   @Override
-  public void clearQuestionsByQuizEntity(QuizEntity quizEntity) {
+  @Transactional
+  public void deleteQuestionsByQuizEntity(QuizEntity quizEntity) {
     List<QuestionEntity> questionEntities = questionRepository.findQuestionEntitiesByQuiz(quizEntity);
-    for (QuestionEntity questionEntity : questionEntities) {
-      questionRepository.deleteById(questionEntity.getQuestionId());
-    }
+    log.info("Trying to delete questions");
+    questionRepository.deleteAll(questionEntities);
   }
 
   /**
