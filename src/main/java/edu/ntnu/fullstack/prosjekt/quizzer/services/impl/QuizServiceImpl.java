@@ -82,7 +82,7 @@ public class QuizServiceImpl implements QuizService {
    * @return The created QuizEntity
    */
   @Override
-  public void createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity) {
+  public QuizDetailsDto createQuiz(QuizDetailsDto quizDetailsDto, UserEntity userEntity) {
     log.info("Creating quiz");
 
     if (quizDetailsDto.getTitle() == null || quizDetailsDto.getTitle().isEmpty()) {
@@ -95,20 +95,18 @@ public class QuizServiceImpl implements QuizService {
       log.info("Could not find user");
       throw new IllegalArgumentException("No user with username: " + quizDetailsDto.getOwner());
     }
-    log.info("Quizdetails in service: " + quizDetailsDto);
     QuizEntity quizEntity = quizMapper.mapFrom(quizDetailsDto);
-    log.info("Quizentity in service: " + quizEntity);
     quizEntity.setOwner(userEntity);
-    log.info("owner set");
+
     log.info("questions: " + quizDetailsDto.getQuestions());
     QuizEntity savedQuizEntity = quizRepository.save(quizEntity);
     questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
 
-    log.info("added questions");
     log.info("Saved quiz entity: " + savedQuizEntity);
 
     QuizDetailsDto savedQuizDto = quizMapper.mapTo(savedQuizEntity);
     log.info("Saved quiz dto: " + savedQuizDto);
+    return savedQuizDto;
   }
 
   /**
@@ -175,11 +173,8 @@ public class QuizServiceImpl implements QuizService {
     QuizEntity updatedQuizEntity = new ModelMapper().map(quizDetailsDto, QuizEntity.class);
     quizRepository.save(updatedQuizEntity);*/
     QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
-    log.info("Before trying to delete questions");
     questionService.deleteQuestionsByQuizEntity(quizEntity);
     quizRepository.delete(quizEntity);
-    log.info("Tried deleting");
-    log.info("Is deleted: " + quizRepository.findById(quizEntity.getQuizId()));
     createQuiz(quizDetailsDto, userEntity);
   }
 
@@ -220,12 +215,10 @@ public class QuizServiceImpl implements QuizService {
     log.info("Questions in quiz: " + quizQuestions);
     log.info("Quiz id: " + quizId);
     for (int i = 0; i < quizQuestions.size(); i++) {
-      log.info("Inside first loop");
       log.info("Question alternatives: " + quizQuestions.get(i).getAlternatives());
       for (int j = 0; j < quizQuestions.get(i).getAlternatives().size(); j++) {
         Object alternative = quizQuestions.get(i).getAlternatives().get(j);
         if (alternative instanceof Map) {
-          log.info("Inside second loop");
           Map<String, Object> alternativeMap = (Map<String, Object>) alternative;
           String answer = (String) alternativeMap.get("answer");
           Object isCorrect = alternativeMap.get("isCorrect");
@@ -241,7 +234,6 @@ public class QuizServiceImpl implements QuizService {
     QuizAttemptEntity quizAttemptEntity = new ModelMapper().map(quizAttemptDto, QuizAttemptEntity.class);
     log.info("Found userENTITY: " + userEntity);
     quizAttemptEntity.setUser(userEntity);
-    log.info("Not failed after setting user");
     log.info("Found quizentity: " + findQuizEntityById(quizId));
     quizAttemptEntity.setQuiz(findQuizEntityById(quizId));
     log.info("Saving attempt: " + quizAttemptEntity);

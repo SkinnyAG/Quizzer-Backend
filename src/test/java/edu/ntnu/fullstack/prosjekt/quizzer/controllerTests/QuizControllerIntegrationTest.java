@@ -149,7 +149,7 @@ public class QuizControllerIntegrationTest {
             .content(objectMapper.writeValueAsString(quizDetailsDtoMock)))
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.message").value("You are not authorized to update this quiz"));
+            .andExpect(jsonPath("$.message").value("You are not authorized to delete this quiz"));
   }
 
   @Test
