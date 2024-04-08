@@ -16,7 +16,7 @@ public class QuizAttemptEntity {
 
   private Integer score;
 
-  private Integer timeUsed;
+  private Integer duration;
 
   @ManyToOne
   private UserEntity user;
