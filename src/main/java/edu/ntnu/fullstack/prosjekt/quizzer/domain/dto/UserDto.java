@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
  * The UserDto class is a mirror of the userEntity class, with the intention of creating
  * a separation between user input/output and database objects.
  */
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -19,9 +19,7 @@ import java.util.Set;
 @Repository
 public interface QuizRepository extends CrudRepository<QuizEntity, Long>,
         PagingAndSortingRepository<QuizEntity, Long> {
-
-  //Page<QuizEntity> findQuizEntitiesByCategories(Set<CategoryEntity> categories, Pageable pageable);
-
+  
   @Query("SELECT entity FROM QuizEntity entity JOIN entity.categories category WHERE category.categoryName LIKE %:searchQuery% OR entity.title LIKE %:searchQuery%")
   Page<QuizEntity> findByCategoriesInOrTitleContaining(@RequestParam("searchQuery") String searchQuery, Pageable pageable);
 }

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Provides basic CRUD functionality for database operations against the quiz_attempt database table.
+ */
 @Repository
 public interface AttemptRepository extends JpaRepository<QuizAttemptEntity, Long> {
   Page<QuizAttemptEntity> findQuizAttemptEntitiesByUser(UserEntity userEntity, Pageable pageable);

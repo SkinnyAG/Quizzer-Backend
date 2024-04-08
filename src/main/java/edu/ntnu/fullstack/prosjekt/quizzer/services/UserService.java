@@ -67,5 +67,11 @@ public interface UserService {
    */
   void updateUserPassword(String username, String newPassword);
 
+  /**
+   * Service for finding attempts based on a user.
+   * @param username
+   * @param pageable
+   * @return
+   */
   Page<SavedQuizAttemptDto> findAttemptsByUser(String username, Pageable pageable);
 }
