@@ -42,6 +42,9 @@ public class QuizEntity {
    */
   private String description;
 
+  /**
+   * The categories field should store a list of categories that the quiz belongs to.
+   */
   @ManyToMany
   private Set<CategoryEntity> categories;
 

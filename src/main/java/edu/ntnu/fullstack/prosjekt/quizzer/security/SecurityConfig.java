@@ -11,11 +11,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Security configuration class.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
+  /**
+   * Configures the security filter chain.
+   *
+   * @param http The HttpSecurity object to configure.
+   * @return The SecurityFilterChain object.
+   * @throws Exception If an error occurs.
+   */
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
@@ -30,6 +40,11 @@ public class SecurityConfig {
     return http.build();
   }
 
+  /**
+   * Configures the password encoder.
+   *
+   * @return The PasswordEncoder object.
+   */
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();

@@ -18,6 +18,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
+/**
+ * A class that extends OncePerRequestFilter and is used to filter requests.
+ */
 @Log
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
@@ -25,6 +28,15 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
   public static final String ROLE_USER = "ROLE_ " + USER;
 
 
+  /**
+   * Filters the request and checks if the token is valid.
+   *
+   * @param request     The request to be filtered.
+   * @param response    The response to be filtered.
+   * @param filterChain The filter chain.
+   * @throws ServletException If the request could not be handled.
+   * @throws IOException      If an input or output exception occurs.
+   */
   @Override
   protected void doFilterInternal(
           HttpServletRequest request,
@@ -52,6 +64,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
+  /**
+   * Validates the token and returns the user id.
+   *
+   * @param token The token to be validated.
+   * @return The user id.
+   */
   public String validateTokenAndGetUserId(final String token) {
     try {
       final Algorithm hmac512 = Algorithm.HMAC512("changemeinprod");

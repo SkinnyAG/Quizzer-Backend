@@ -44,9 +44,18 @@ public class QuizDetailsDto {
    */
   private UserDto owner;
 
+  /**
+   * The categories field should store a list of categories that the quiz belongs to.
+   */
   private List<CategoryDto> categories = new ArrayList<>();
 
+  /**
+   * The collaborators field should store a list of users that are collaborators on the quiz.
+   */
   private List<UserDto> collaborators = new ArrayList<>();
-  
+
+  /**
+   * The questions field should store a list of questions that are part of the quiz.
+   */
   private List<QuestionDto> questions = new ArrayList<>();
 }

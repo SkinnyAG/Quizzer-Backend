@@ -25,6 +25,9 @@ public class QuestionMapperImpl implements Mapper<QuestionEntity, QuestionDto> {
    */
   private ModelMapper modelMapper;
 
+  /**
+   * Used for Dependency Injection.
+   */
   private ObjectMapper objectMapper;
 
   /**
