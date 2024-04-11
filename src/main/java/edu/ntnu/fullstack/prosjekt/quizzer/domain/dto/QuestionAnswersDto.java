@@ -23,6 +23,5 @@ public class QuestionAnswersDto {
   /**
    * The isCorrect field represents whether the answer is correct or not.
    */
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Boolean isCorrect;
 }
