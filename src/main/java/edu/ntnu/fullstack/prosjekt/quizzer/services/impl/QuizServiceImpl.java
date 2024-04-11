@@ -174,8 +174,8 @@ public class QuizServiceImpl implements QuizService {
     quizRepository.save(updatedQuizEntity);*/
     QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
     quizEntity.setTitle(quizDetailsDto.getTitle());
-    quizEntity.setDescription(quizEntity.getDescription());
-    quizEntity.setImageLink(quizEntity.getImageLink());
+    quizEntity.setDescription(quizDetailsDto.getDescription());
+    quizEntity.setImageLink(quizDetailsDto.getImageLink());
     List<CategoryEntity> categoryEntities = quizDetailsDto.getCategories().stream().map(categoryDto -> categoryMapper.mapFrom(categoryDto)).toList();
     log.info("Found categories: " + categoryEntities);
     //categoryRepository.sa
