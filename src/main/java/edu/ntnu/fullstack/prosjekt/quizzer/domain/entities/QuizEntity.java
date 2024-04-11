@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -45,8 +46,7 @@ public class QuizEntity {
   /**
    * The categories field should store a list of categories that the quiz belongs to.
    */
-  @ManyToMany
-  private Set<CategoryEntity> categories;
+
 
   /**
    * Links to an image for the quiz.
@@ -67,9 +67,4 @@ public class QuizEntity {
   @JsonBackReference
   @JoinColumn(name = "username")
   private UserEntity owner;
-
-
-  @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonManagedReference
-  private List<QuestionEntity> questions;
 }

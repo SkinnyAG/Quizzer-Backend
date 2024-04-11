@@ -55,6 +55,7 @@ public class QuizController {
     log.info("Request to createQuiz received with quiz: " + quizDetailsDto);
     log.info("Username: " + username);
     UserEntity userEntity = userService.findEntityByUsername(username);
+    log.info("Creating quiz with data: " + quizDetailsDto);
     try {
       QuizDetailsDto createdQuiz = quizService.createQuiz(quizDetailsDto, userEntity);
       return new ResponseEntity<>(createdQuiz, HttpStatus.CREATED);
@@ -93,6 +94,7 @@ public class QuizController {
   @PutMapping
   public ResponseEntity<MessageDto> updateQuiz(@RequestBody QuizDetailsDto updatedQuizDto) {
     log.info("Questions: " + updatedQuizDto.getQuestions());
+    log.info("Updated quiz data: " + updatedQuizDto);
 
     // Check the username
     String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
@@ -102,15 +104,14 @@ public class QuizController {
     UserEntity userEntity = userService.findEntityByUsername(actualEntry.getOwner().getUsername());
 
     // The user must either be the owner, or a collaborator
-    /*if (!updatedQuizDto.getOwner().getUsername().equals(username)
+    if (!updatedQuizDto.getOwner().getUsername().equals(username)
             && actualEntry.getCollaborators().stream()
             .noneMatch(userDto -> userDto.getUsername().equals(username))) {
       return new ResponseEntity<>(new MessageDto("You are not authorized to update this quiz"), HttpStatus.UNAUTHORIZED);
-    }*/
+    }
 
     log.info("Before entering service");
     quizService.updateQuizEntity(updatedQuizDto, userEntity);
-    quizService.createQuiz(updatedQuizDto, userEntity);
     return new ResponseEntity<>(new MessageDto("Quiz updated"), HttpStatus.OK);
   }
 

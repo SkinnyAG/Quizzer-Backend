@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,5 +32,9 @@ public class CategoryEntity {
    * The quizzes field should store a list of quizzes that are part of the category.
    */
   @ManyToMany
-  private Set<QuizEntity> quizzes;
+  private List<QuizEntity> quizzes;
+
+  public void addQuiz(QuizEntity quizEntity) {
+    this.quizzes.add(quizEntity);
+  }
 }

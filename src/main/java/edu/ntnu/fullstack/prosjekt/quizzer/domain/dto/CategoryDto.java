@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,10 +25,4 @@ public class CategoryDto {
    * The categoryName field represents the name of the category.
    */
   private String categoryName;
-
-    /**
-     * The quizzes field represents the quizzes that has this category.
-     */
-  @JsonBackReference
-  private Set<QuizEntity> quizzes;
 }

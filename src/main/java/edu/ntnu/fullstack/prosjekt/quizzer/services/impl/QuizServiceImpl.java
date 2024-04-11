@@ -173,9 +173,30 @@ public class QuizServiceImpl implements QuizService {
     QuizEntity updatedQuizEntity = new ModelMapper().map(quizDetailsDto, QuizEntity.class);
     quizRepository.save(updatedQuizEntity);*/
     QuizEntity quizEntity = findQuizEntityById(quizDetailsDto.getQuizId().toString());
+    quizEntity.setTitle(quizDetailsDto.getTitle());
+    quizEntity.setDescription(quizEntity.getDescription());
+    quizEntity.setImageLink(quizEntity.getImageLink());
+    List<CategoryEntity> categoryEntities = quizDetailsDto.getCategories().stream().map(categoryDto -> categoryMapper.mapFrom(categoryDto)).toList();
+    log.info("Found categories: " + categoryEntities);
+    for (CategoryEntity categoryEntity : categoryEntities) {
+      categoryEntity.setQuizzes(categoryRepository.);
+    }
+    //categoryRepository.sa
+    //quizEntity.setCategories(categoryEntities);
+
     questionService.deleteQuestionsByQuizEntity(quizEntity);
-    quizRepository.delete(quizEntity);
-    createQuiz(quizDetailsDto, userEntity);
+    /*for (QuestionDto questionDto : quizDetailsDto.getQuestions()) {
+      try {
+        questionService.createQuestion(quizEntity, questionDto);
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
+      }
+    }*/
+    questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
+    //log.info("Updated entity: " + quizEntity.getCategories());
+    quizRepository.save(quizEntity);
+    //quizRepository.delete(quizEntity);
+    //createQuiz(quizDetailsDto, userEntity);
   }
 
   @Override
@@ -249,7 +270,9 @@ public class QuizServiceImpl implements QuizService {
    */
   @Override
   public Page<QuizGeneralDto> filterQuizzes(String searchQuery, Pageable pageable) {
-    Page<QuizEntity> quizEntityPage = quizRepository.findByCategoriesInOrTitleContaining(searchQuery, pageable);
+    log.info("query: " + searchQuery);
+    Page<QuizEntity> quizEntityPage = quizRepository.f(searchQuery, pageable);
+    log.info("Found quiz: " + quizEntityPage.getNumberOfElements());
     ModelMapper mapper = new ModelMapper();
     return quizEntityPage.map(obj -> {
       QuizGeneralDto converted = mapper.map(obj, QuizGeneralDto.class);

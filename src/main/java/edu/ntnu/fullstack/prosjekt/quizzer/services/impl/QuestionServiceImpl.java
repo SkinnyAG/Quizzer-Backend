@@ -71,6 +71,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     mapToJson(questionDto.getAlternatives(), questionEntity);
 
+    log.info("Entity before saving: " + questionEntity.getAlternatives());
     QuestionEntity savedQuestionEntity = questionRepository.save(questionEntity);
     QuestionDto savedQuestionDto = questionMapper.mapTo(savedQuestionEntity);
 
@@ -114,11 +115,15 @@ public class QuestionServiceImpl implements QuestionService {
    * @param quizEntity The quiz to clear questions for.
    */
   @Override
-  @Transactional
   public void deleteQuestionsByQuizEntity(QuizEntity quizEntity) {
     List<QuestionEntity> questionEntities = questionRepository.findQuestionEntitiesByQuiz(quizEntity);
+    log.info("Found question entities: " + questionEntities);
     log.info("Trying to delete questions");
-    questionRepository.deleteAll(questionEntities);
+    for (QuestionEntity questionEntity : questionEntities) {
+      log.info("Found question id: " + questionEntity.getQuestionId());
+      questionRepository.deleteById(questionEntity.getQuestionId());
+    }
+    log.info("After deleting: " + questionRepository.findQuestionEntitiesByQuiz(quizEntity));
   }
 
   /**
