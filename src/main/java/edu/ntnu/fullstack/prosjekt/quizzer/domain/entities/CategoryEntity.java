@@ -32,7 +32,7 @@ public class CategoryEntity {
    * The quizzes field should store a list of quizzes that are part of the category.
    */
   @ManyToMany
-  private List<QuizEntity> quizzes;
+  private List<QuizEntity> quizzes = new ArrayList<>();
 
   public void addQuiz(QuizEntity quizEntity) {
     this.quizzes.add(quizEntity);

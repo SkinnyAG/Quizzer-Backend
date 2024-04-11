@@ -190,9 +190,9 @@ public class QuizServiceImpl implements QuizService {
       }
     }*/
     questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
-    /*for (CategoryEntity categoryEntity : categoryEntities) {
+    for (CategoryEntity categoryEntity : categoryEntities) {
       categoryEntity.addQuiz(quizEntity);
-    }*/
+    }
     //log.info("Updated entity: " + quizEntity.getCategories());
     quizRepository.save(quizEntity);
     //quizRepository.delete(quizEntity);
