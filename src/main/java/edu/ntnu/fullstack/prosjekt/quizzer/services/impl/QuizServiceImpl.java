@@ -178,9 +178,6 @@ public class QuizServiceImpl implements QuizService {
     quizEntity.setImageLink(quizEntity.getImageLink());
     List<CategoryEntity> categoryEntities = quizDetailsDto.getCategories().stream().map(categoryDto -> categoryMapper.mapFrom(categoryDto)).toList();
     log.info("Found categories: " + categoryEntities);
-    for (CategoryEntity categoryEntity : categoryEntities) {
-      categoryEntity.setQuizzes(categoryRepository.);
-    }
     //categoryRepository.sa
     //quizEntity.setCategories(categoryEntities);
 
@@ -193,6 +190,9 @@ public class QuizServiceImpl implements QuizService {
       }
     }*/
     questionService.addListOfQuestions(quizDetailsDto.getQuestions(), quizEntity);
+    /*for (CategoryEntity categoryEntity : categoryEntities) {
+      categoryEntity.addQuiz(quizEntity);
+    }*/
     //log.info("Updated entity: " + quizEntity.getCategories());
     quizRepository.save(quizEntity);
     //quizRepository.delete(quizEntity);
